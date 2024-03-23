@@ -11,7 +11,10 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Button from '../components/Button.tsx';
-// import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
 
@@ -19,15 +22,29 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  //   const handleGoogleSignIn = async () => {
-  //     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-  //     const {idToken} = await GoogleSignin.signIn();
+  GoogleSignin.configure({
+    webClientId:
+      '1023232230089-simi48vfd10909cialu0dqlpu1e8vn85.apps.googleusercontent.com',
+  });
 
-  //     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-  //     return auth().signInWithCredential(googleCredential);
-  //   };
-
+  // Somewhere in your code
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
   const signUpWithCredentials = async () => {
     try {
       const response = await auth().createUserWithEmailAndPassword(
@@ -85,7 +102,7 @@ const SignUpScreen = () => {
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <TouchableOpacity
-            onPress={() => console.log('pressed')}
+            onPress={signIn}
             style={styles.signInMethodContainer}>
             <Image
               source={require('../assets/google.png')}
