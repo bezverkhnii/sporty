@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -11,9 +12,13 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Button from '../components/Button.tsx';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
-// import auth from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
+import {useState} from 'react';
 
 const SignUpScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   //   const handleGoogleSignIn = async () => {
   //     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
   //     const {idToken} = await GoogleSignin.signIn();
@@ -22,6 +27,19 @@ const SignUpScreen = () => {
 
   //     return auth().signInWithCredential(googleCredential);
   //   };
+
+  const signUpWithCredentials = async () => {
+    try {
+      const response = await auth().createUserWithEmailAndPassword(
+        email,
+        password,
+      );
+      console.log('User created!');
+      console.log(response.user);
+    } catch (error) {
+      Alert.alert('Error creating user.', error.message);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerView}>
@@ -33,6 +51,9 @@ const SignUpScreen = () => {
             <TextInput
               placeholder="Email address"
               placeholderTextColor="#353535"
+              value={email}
+              autoCapitalize="none"
+              onChangeText={e => setEmail(e)}
               keyboardType="email-address"
               style={{width: '100%'}}
             />
@@ -43,13 +64,15 @@ const SignUpScreen = () => {
           <View style={styles.inputBox}>
             <TextInput
               placeholder="Password"
+              value={password}
               secureTextEntry
+              onChangeText={p => setPassword(p)}
               placeholderTextColor="#353535"
               style={{width: '100%'}}
             />
           </View>
         </View>
-        <Button title="Sign up" filled onPress={() => console.log('')} />
+        <Button title="Sign up" filled onPress={signUpWithCredentials} />
         <View
           style={{
             flexDirection: 'row',
@@ -71,6 +94,7 @@ const SignUpScreen = () => {
             <Text>Google</Text>
           </TouchableOpacity>
         </View>
+        <Text>Already have an account?</Text>
       </View>
     </SafeAreaView>
   );
