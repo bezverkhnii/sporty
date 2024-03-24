@@ -17,6 +17,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
+import {useAuthContext} from '../navigation/AuthProvider.tsx';
 
 const SignUpScreen = () => {
   const [email, setEmail] = useState('');
@@ -27,36 +28,8 @@ const SignUpScreen = () => {
       '1023232230089-simi48vfd10909cialu0dqlpu1e8vn85.apps.googleusercontent.com',
   });
 
-  // Somewhere in your code
-  const signIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo);
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-      } else {
-        // some other error happened
-      }
-    }
-  };
-  const signUpWithCredentials = async () => {
-    try {
-      const response = await auth().createUserWithEmailAndPassword(
-        email,
-        password,
-      );
-      console.log('User created!');
-      console.log(response.user);
-    } catch (error) {
-      Alert.alert('Error creating user.', error.message);
-    }
-  };
+  const {signInWithGoogle, signInWithCredentials} = useAuthContext();
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerView}>
@@ -89,7 +62,7 @@ const SignUpScreen = () => {
             />
           </View>
         </View>
-        <Button title="Sign up" filled onPress={signUpWithCredentials} />
+        <Button title="Sign up" filled onPress={signInWithCredentials} />
         <View
           style={{
             flexDirection: 'row',
@@ -102,7 +75,7 @@ const SignUpScreen = () => {
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <TouchableOpacity
-            onPress={signIn}
+            onPress={signInWithGoogle}
             style={styles.signInMethodContainer}>
             <Image
               source={require('../assets/google.png')}
