@@ -1,59 +1,43 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react/react-in-jsx-scope */
+import LottieView from 'lottie-react-native';
+import React, {useContext, useState} from 'react';
 import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  TouchableOpacity,
+  TextInput,
+  Image,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Button from '../components/Button.tsx';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {useState} from 'react';
-import {useAuthContext} from '../navigation/AuthProvider.tsx';
-import LottieView from 'lottie-react-native';
-import {useNavigation} from '@react-navigation/native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {useAuthContext} from '../navigation/AuthProvider';
+import Button from '../components/Button';
 
-const SignUpScreen = () => {
+const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [opacity, setOpacity] = useState(1);
-  const navigation = useNavigation();
 
-  const handlePressIn = () => {
-    setOpacity(0.5); // Change opacity to 0.5 when pressed in
-  };
-
-  const handlePressOut = () => {
-    setOpacity(1); // Change opacity back to 1 when pressed out
-  };
-
-  GoogleSignin.configure({
-    webClientId:
-      '1023232230089-simi48vfd10909cialu0dqlpu1e8vn85.apps.googleusercontent.com',
-  });
-  //@ts-expect-error
-  const {signInWithGoogle, signInWithCredentials} = useAuthContext();
+  const {loginWithCredentials, signInWithGoogle} = useAuthContext();
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.innerView}>
-          <View style={{height: 400}}>
+          <View
+            style={{
+              height: 400,
+            }}>
             <LottieView
               style={styles.animation}
-              source={require('../assets/animations/SignUpScreenAnimation.json')}
+              source={require('../assets/animations/Meditating.json')}
               autoPlay
             />
           </View>
-          <Text style={styles.header}>Create Account</Text>
-          <Text style={styles.text}>Start sculpting your body today!</Text>
+          <Text style={styles.header}>Login</Text>
+          <Text style={styles.text}>Continue your fitness journey!</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>1. Enter your email</Text>
+            <Text style={styles.inputLabel}>Email</Text>
             <View style={styles.inputBox}>
               <TextInput
                 placeholder="Email address"
@@ -67,7 +51,7 @@ const SignUpScreen = () => {
             </View>
           </View>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>2. Create Password</Text>
+            <Text style={styles.inputLabel}>Password</Text>
             <View style={styles.inputBox}>
               <TextInput
                 placeholder="Password"
@@ -80,9 +64,9 @@ const SignUpScreen = () => {
             </View>
           </View>
           <Button
-            title="Sign up"
+            title="Log In"
             filled
-            onPress={() => signInWithCredentials(email, password)}
+            onPress={() => loginWithCredentials(email, password)}
           />
           <View
             style={{
@@ -91,7 +75,7 @@ const SignUpScreen = () => {
               marginVertical: 20,
             }}>
             <View style={styles.dividor} />
-            <Text style={{color: 'gray'}}>Or sign up with</Text>
+            <Text style={{color: 'gray'}}>Or log in with</Text>
             <View style={styles.dividor} />
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
@@ -105,7 +89,7 @@ const SignUpScreen = () => {
               <Text>Google</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.loginContainer}>
+          {/* <View style={styles.loginContainer}>
             <Text>Already have an account?</Text>
             <Pressable
               onPress={() => navigation.navigate('Login')}
@@ -114,14 +98,14 @@ const SignUpScreen = () => {
               style={{opacity}}>
               <Text style={styles.loginButton}>Log In</Text>
             </Pressable>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default SignUpScreen;
+export default LoginScreen;
 
 export const styles = StyleSheet.create({
   container: {

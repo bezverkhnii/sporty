@@ -1,13 +1,20 @@
 import React, {createContext, useContext, useState} from 'react';
 import auth from '@react-native-firebase/auth';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 import {Alert} from 'react-native';
 
 const AuthContext = createContext(null);
 
 export const useAuthContext = () => useContext(AuthContext);
 
-const AuthProvider = ({children}) => {
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
+const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const [user, setUser] = useState(null);
 
   GoogleSignin.configure({
@@ -23,8 +30,20 @@ const AuthProvider = ({children}) => {
       );
       console.log('User created!');
       console.log(response.user);
-    } catch (error) {
-      Alert.alert('Error creating user.', error.message);
+    } catch (error: any) {
+      Alert.alert('Error creating user.', error.code);
+      console.log(error);
+    }
+  };
+
+  const loginWithCredentials = async (email: string, password: string) => {
+    try {
+      const response = await auth().signInWithEmailAndPassword(email, password);
+      console.log('Successful login');
+      console.log(response.user);
+    } catch (error: any) {
+      Alert.alert('Error while loggin in.', error.message);
+      console.log(error);
     }
   };
 
@@ -34,15 +53,19 @@ const AuthProvider = ({children}) => {
       const {idToken} = await GoogleSignin.signIn();
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       await auth().signInWithCredential(googleCredential);
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
+        Alert.alert('Sign-in cancelled.', error.code);
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
+        Alert.alert('Sign-in already in progress.', error.code);
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
+        Alert.alert(
+          'Play Services are not available at the moment.',
+          error.code,
+        );
       } else {
-        // some other error happened
+        Alert.alert('Ooops... Something went wrong');
+        console.log(error.code);
       }
     }
   };
@@ -85,11 +108,13 @@ const AuthProvider = ({children}) => {
     user,
     setUser,
     signInWithCredentials,
+    loginWithCredentials,
     signInWithGoogle,
     logout,
   };
 
   return (
+    //@ts-expect-error
     <AuthContext.Provider value={contextValues}>
       {children}
     </AuthContext.Provider>

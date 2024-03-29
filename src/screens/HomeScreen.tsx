@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Text} from 'react-native';
+import {Button, Pressable, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAuthContext} from '../navigation/AuthProvider';
 

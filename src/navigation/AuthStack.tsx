@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import SignUpScreen from '../screens/SignUpScreen';
+import LoginScreen from '../screens/LoginScreen';
+import {COLORS} from '../constants/colors';
 // import LoginScreen from '../screens/LoginScreen';
 // import OnboardingScreen from '../screens/OnboardingScreen';
 
@@ -13,6 +15,7 @@ const AuthStack = () => {
   //   const [isFirstLaunch, setIsFirstLaunch] = useState(null);
   let routeName = 'SignUp';
 
+  //in case of onboarding screen will be added
   //   useEffect(() => {
   //     AsyncStorage.getItem('alreadyLaunched').then(value => {
   //       if (value == null) {
@@ -34,38 +37,22 @@ const AuthStack = () => {
 
   return (
     <Stack.Navigator initialRouteName={routeName}>
-      {/* <Stack.Screen
-        name="Onboarding"
-        component={OnboardingScreen}
-        options={{header: () => null}}
-      />
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{header: () => null}}
-      /> */}
+        options={{
+          headerStyle: {
+            backgroundColor: COLORS.primary,
+          },
+          headerBackTitleVisible: false,
+          headerTransparent: true,
+          headerTitle: '',
+        }}
+      />
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
-        options={() => ({
-          title: '',
-          headerStyle: {
-            backgroundColor: '#f9fafd',
-            shadowColor: '#f9fafd',
-            elevation: 0,
-          },
-          //   headerLeft: () => (
-          //     <View style={{marginLeft: 10}}>
-          //       <FontAwesome.Button
-          //         name="long-arrow-left"
-          //         size={25}
-          //         backgroundColor="#f9fafd"
-          //         color="#333"
-          //         onPress={() => navigation.navigate('Login')}
-          //       />
-          //     </View>
-          //   ),
-        })}
+        options={{header: () => null}}
       />
     </Stack.Navigator>
   );
