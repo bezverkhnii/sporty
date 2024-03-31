@@ -5,6 +5,7 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import {Alert} from 'react-native';
+import {firebaseErrorToText} from '../utils/firebaseErrorToText';
 
 const AuthContext = createContext(null);
 
@@ -31,8 +32,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
       console.log('User created!');
       console.log(response.user);
     } catch (error: any) {
-      Alert.alert('Error creating user.', error.code);
-      console.log(error);
+      const errorMessage = firebaseErrorToText(error);
+      Alert.alert('Error creating user.', errorMessage);
     }
   };
 
@@ -42,8 +43,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
       console.log('Successful login');
       console.log(response.user);
     } catch (error: any) {
-      Alert.alert('Error while loggin in.', error.message);
-      console.log(error);
+      const errorMessage = firebaseErrorToText(error);
+      Alert.alert('Error while loggin in.', errorMessage);
     }
   };
 
@@ -55,14 +56,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
       await auth().signInWithCredential(googleCredential);
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        Alert.alert('Sign-in cancelled.', error.code);
+        Alert.alert('Sign-in cancelled.');
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        Alert.alert('Sign-in already in progress.', error.code);
+        Alert.alert('Sign-in already in progress.');
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        Alert.alert(
-          'Play Services are not available at the moment.',
-          error.code,
-        );
+        Alert.alert('Play Services are not available at the moment.');
       } else {
         Alert.alert('Ooops... Something went wrong');
         console.log(error.code);

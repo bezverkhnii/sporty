@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import {Text, TouchableOpacity} from 'react-native';
+import {COLORS} from '../constants/colors';
 
 interface IButton {
   title: string;
@@ -12,8 +13,8 @@ const Button: React.FC<IButton> = ({title, filled, onPress}) => {
     <TouchableOpacity
       style={[
         filled
-          ? {backgroundColor: '#325a3e'}
-          : {borderColor: '#325a3e', borderWidth: 3},
+          ? {backgroundColor: COLORS.green}
+          : {borderColor: COLORS.green, borderWidth: 3},
         {paddingVertical: 15, alignItems: 'center', borderRadius: 8},
       ]}
       onPress={onPress}>

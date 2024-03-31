@@ -17,20 +17,13 @@ import {useAuthContext} from '../navigation/AuthProvider.tsx';
 import LottieView from 'lottie-react-native';
 import {useNavigation} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {COLORS} from '../constants/colors.ts';
+import OpacityPressable from '../components/OpacityPressable.tsx';
 
 const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [opacity, setOpacity] = useState(1);
   const navigation = useNavigation();
-
-  const handlePressIn = () => {
-    setOpacity(0.5); // Change opacity to 0.5 when pressed in
-  };
-
-  const handlePressOut = () => {
-    setOpacity(1); // Change opacity back to 1 when pressed out
-  };
 
   GoogleSignin.configure({
     webClientId:
@@ -57,7 +50,7 @@ const SignUpScreen = () => {
             <View style={styles.inputBox}>
               <TextInput
                 placeholder="Email address"
-                placeholderTextColor="#353535"
+                placeholderTextColor={COLORS.borderColor}
                 value={email}
                 autoCapitalize="none"
                 onChangeText={e => setEmail(e)}
@@ -74,7 +67,7 @@ const SignUpScreen = () => {
                 value={password}
                 secureTextEntry
                 onChangeText={p => setPassword(p)}
-                placeholderTextColor="#353535"
+                placeholderTextColor={COLORS.borderColor}
                 style={{width: '100%'}}
               />
             </View>
@@ -91,7 +84,7 @@ const SignUpScreen = () => {
               marginVertical: 20,
             }}>
             <View style={styles.dividor} />
-            <Text style={{color: 'gray'}}>Or sign up with</Text>
+            <Text style={{color: COLORS.grayText}}>Or sign up with</Text>
             <View style={styles.dividor} />
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
@@ -107,13 +100,9 @@ const SignUpScreen = () => {
           </View>
           <View style={styles.loginContainer}>
             <Text>Already have an account?</Text>
-            <Pressable
-              onPress={() => navigation.navigate('Login')}
-              onPressIn={handlePressIn}
-              onPressOut={handlePressOut}
-              style={{opacity}}>
+            <OpacityPressable onPress={() => navigation.navigate('Login')}>
               <Text style={styles.loginButton}>Log In</Text>
-            </Pressable>
+            </OpacityPressable>
           </View>
         </View>
       </ScrollView>
@@ -126,7 +115,7 @@ export default SignUpScreen;
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.primary,
   },
 
   innerView: {
@@ -147,7 +136,7 @@ export const styles = StyleSheet.create({
 
   text: {
     fontSize: 16,
-    color: '#000000',
+    color: COLORS.grayText,
   },
 
   inputContainer: {
@@ -158,12 +147,13 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     marginVertical: 8,
+    color: COLORS.grayText,
   },
 
   inputBox: {
     width: '100%',
     height: 48,
-    borderColor: '#000',
+    borderColor: COLORS.borderColor,
     borderWidth: 1,
     borderRadius: 8,
     alignItems: 'center',
@@ -174,7 +164,7 @@ export const styles = StyleSheet.create({
   dividor: {
     flex: 1,
     height: 1,
-    backgroundColor: 'gray',
+    backgroundColor: COLORS.borderColor,
     marginHorizontal: 10,
   },
 
@@ -185,7 +175,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 52,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: COLORS.borderColor,
     marginRight: 4,
     borderRadius: 10,
   },

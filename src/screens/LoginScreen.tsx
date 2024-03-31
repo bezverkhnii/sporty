@@ -13,6 +13,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAuthContext} from '../navigation/AuthProvider';
 import Button from '../components/Button';
+import {COLORS} from '../constants/colors';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -41,7 +42,7 @@ const LoginScreen = () => {
             <View style={styles.inputBox}>
               <TextInput
                 placeholder="Email address"
-                placeholderTextColor="#353535"
+                placeholderTextColor={COLORS.borderColor}
                 value={email}
                 autoCapitalize="none"
                 onChangeText={e => setEmail(e)}
@@ -58,7 +59,7 @@ const LoginScreen = () => {
                 value={password}
                 secureTextEntry
                 onChangeText={p => setPassword(p)}
-                placeholderTextColor="#353535"
+                placeholderTextColor={COLORS.borderColor}
                 style={{width: '100%'}}
               />
             </View>
@@ -75,7 +76,7 @@ const LoginScreen = () => {
               marginVertical: 20,
             }}>
             <View style={styles.dividor} />
-            <Text style={{color: 'gray'}}>Or log in with</Text>
+            <Text style={{color: COLORS.grayText}}>Or log in with</Text>
             <View style={styles.dividor} />
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
@@ -110,7 +111,7 @@ export default LoginScreen;
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.primary,
   },
 
   innerView: {
@@ -131,7 +132,7 @@ export const styles = StyleSheet.create({
 
   text: {
     fontSize: 16,
-    color: '#000000',
+    color: COLORS.grayText,
   },
 
   inputContainer: {
@@ -142,12 +143,13 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     marginVertical: 8,
+    color: COLORS.grayText,
   },
 
   inputBox: {
     width: '100%',
     height: 48,
-    borderColor: '#000',
+    borderColor: COLORS.borderColor,
     borderWidth: 1,
     borderRadius: 8,
     alignItems: 'center',
@@ -158,7 +160,7 @@ export const styles = StyleSheet.create({
   dividor: {
     flex: 1,
     height: 1,
-    backgroundColor: 'gray',
+    backgroundColor: COLORS.borderColor,
     marginHorizontal: 10,
   },
 
@@ -169,7 +171,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 52,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: '#cccccc',
     marginRight: 4,
     borderRadius: 10,
   },
