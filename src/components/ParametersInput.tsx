@@ -2,7 +2,7 @@ import React from 'react';
 import {View, TextInput, StyleSheet, Text, Button} from 'react-native';
 import {COLORS} from '../constants/colors';
 
-const ParametersInput = ({value, placeholder}) => {
+const ParametersInput = ({value, placeholder, onChangeText}) => {
   return (
     <View style={styles.container}>
       <Text>{placeholder}</Text>
@@ -11,8 +11,9 @@ const ParametersInput = ({value, placeholder}) => {
           placeholder={placeholder}
           placeholderTextColor={COLORS.borderColor}
           value={value}
-          // onChangeText={e => setEmail(e)}
+          onChangeText={onChangeText}
           style={{width: '100%'}}
+          inputMode="numeric"
         />
       </View>
     </View>

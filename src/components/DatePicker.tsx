@@ -3,17 +3,10 @@ import {View, Text, StyleSheet, Button} from 'react-native';
 import {COLORS} from '../constants/colors';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
+import {formatDate} from '../utils/formatDate';
 
-const DatePickerField = () => {
-  const minDate = moment().subtract(18, 'years').toDate();
-
+const DatePickerField = ({date, setDate}) => {
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(minDate);
-
-  //@ts-expect-error
-  const formatDate = selectedDate => {
-    return moment(selectedDate).calendar();
-  };
 
   return (
     <View style={styles.container}>

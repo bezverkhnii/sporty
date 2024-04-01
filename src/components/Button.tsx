@@ -8,7 +8,7 @@ interface IButton {
   onPress: () => void;
 }
 
-const Button: React.FC<IButton> = ({title, filled, onPress}) => {
+const CustomButton: React.FC<IButton> = ({title, filled, onPress}) => {
   return (
     <TouchableOpacity
       style={[
@@ -29,4 +29,4 @@ const Button: React.FC<IButton> = ({title, filled, onPress}) => {
   );
 };
 
-export default Button;
+export default CustomButton;

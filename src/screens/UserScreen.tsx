@@ -1,42 +1,95 @@
-import React from 'react';
-import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Button,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAuthContext} from '../navigation/AuthProvider';
 import InfoNote from '../components/InfoNote';
 import TextInputField from '../components/TextInputField';
-import DatePicker from 'react-native-date-picker';
 import ParametersInput from '../components/ParametersInput';
 import DatePickerField from '../components/DatePicker';
 import {COLORS} from '../constants/colors';
+import ActivityRadioButtonGroup from '../components/ActivityRadioButtonGroup';
+import CustomButton from '../components/Button';
+import moment from 'moment';
+import {formatDate} from '../utils/formatDate';
 
 const UserScreen = () => {
+  const minDate = moment().subtract(18, 'years').toDate();
+
   //@ts-expect-error
   const {logout, user} = useAuthContext();
+  const [name, setName] = useState(user.displayName);
+  const [height, setHeight] = useState(0);
+  const [currentWeight, setCurrentWeight] = useState(0);
+  const [desiredWeight, setDesiredWeight] = useState(0);
+  const [date, setDate] = useState(minDate);
+  const [activityLevel, setActivityLevel] = useState('level_1');
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={{uri: user.photoURL}} style={styles.image} />
-      <Text style={styles.userName}>{user.displayName}</Text>
-      <InfoNote>
-        We understand that each individual is unique, so the entire approach to
-        diet is relative and tailored to your unique body and goals.
-      </InfoNote>
-      <Button title="Logout" onPress={logout} />
-      <View style={styles.basicInfo}>
-        <Text>Basic Info</Text>
-        <TextInputField placeholder="Username" value={user.displayName} />
-        <TextInputField
-          placeholder="Email address"
-          value={user.email}
-          editable={false}
-        />
-      </View>
-      <View style={styles.parametersContainer}>
-        <ParametersInput placeholder="Height" value="1" />
-        <ParametersInput placeholder="Current weight" value="1" />
-        <ParametersInput placeholder="Desired weight" value="0" />
-        <DatePickerField />
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <Image source={{uri: user.photoURL}} style={styles.image} />
+        <Text style={styles.userName}>{name}</Text>
+        <InfoNote>
+          We understand that each individual is unique, so the entire approach
+          to diet is relative and tailored to your unique body and goals.
+        </InfoNote>
+        <Button title="Logout" onPress={logout} />
+        <View style={styles.basicInfo}>
+          <Text>Basic Info</Text>
+          <TextInputField placeholder="Username" value={name} />
+          <TextInputField
+            placeholder="Email address"
+            value={user.email}
+            editable={false}
+          />
+        </View>
+        <View style={styles.parametersContainer}>
+          <ParametersInput
+            placeholder="Height"
+            value={height}
+            onChangeText={e => setHeight(e)}
+          />
+          <ParametersInput
+            placeholder="Current weight"
+            value={currentWeight}
+            onChangeText={e => setCurrentWeight(e)}
+          />
+          <ParametersInput
+            placeholder="Desired weight"
+            value={desiredWeight}
+            onChangeText={e => setDesiredWeight(e)}
+          />
+          <DatePickerField date={date} setDate={setDate} />
+        </View>
+        <View>
+          <ActivityRadioButtonGroup
+            activityLevel={activityLevel}
+            setActivityLevel={setActivityLevel}
+          />
+        </View>
+      </ScrollView>
+      <CustomButton
+        filled
+        title="Save"
+        onPress={() =>
+          console.log({
+            name,
+            height,
+            currentWeight,
+            desiredWeight,
+            date: formatDate(date),
+            activityLevel,
+          })
+        }
+      />
     </SafeAreaView>
   );
 };
@@ -46,9 +99,13 @@ export default UserScreen;
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: COLORS.primary,
     paddingHorizontal: 20,
+    paddingBottom: -20,
+    backgroundColor: COLORS.primary,
+  },
+  scrollView: {
+    alignItems: 'center',
+    paddingBottom: 10,
   },
   image: {
     height: 90,

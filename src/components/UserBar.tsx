@@ -16,7 +16,6 @@ const UserBar = () => {
           <Image source={{uri: user.photoURL}} style={styles.image} />
         </OpacityPressable>
       </View>
-      <View style={styles.dividor} />
     </View>
   );
 };
@@ -38,10 +37,5 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 50,
-  },
-  dividor: {
-    marginTop: 6,
-    height: 1,
-    backgroundColor: COLORS.borderColor,
   },
 });
