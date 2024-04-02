@@ -1,13 +1,8 @@
 import React from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 import {COLORS} from '../constants/colors';
-import {useAuthContext} from '../navigation/AuthProvider';
 
 const TextInputField = ({value, placeholder, editable = true}) => {
-  const {user} = useAuthContext();
-
-  console.log(user);
-
   return (
     <View style={styles.inputBox}>
       <TextInput
@@ -15,7 +10,7 @@ const TextInputField = ({value, placeholder, editable = true}) => {
         placeholderTextColor={COLORS.borderColor}
         value={value}
         // onChangeText={e => setEmail(e)}
-        style={[!editable ? {color: COLORS.borderColor} : {}, {width: '100%'}]}
+        style={[!editable ? {color: COLORS.grayText} : {}, {width: '100%'}]}
         editable={editable}
       />
     </View>

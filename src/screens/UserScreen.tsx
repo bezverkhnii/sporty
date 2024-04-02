@@ -25,10 +25,9 @@ const UserScreen = () => {
 
   //@ts-expect-error
   const {logout, user} = useAuthContext();
-  const [name, setName] = useState(user.displayName);
-  const [height, setHeight] = useState(0);
-  const [currentWeight, setCurrentWeight] = useState(0);
-  const [desiredWeight, setDesiredWeight] = useState(0);
+  const [height, setHeight] = useState();
+  const [currentWeight, setCurrentWeight] = useState();
+  const [desiredWeight, setDesiredWeight] = useState();
   const [date, setDate] = useState(minDate);
   const [activityLevel, setActivityLevel] = useState('level_1');
 
@@ -36,7 +35,7 @@ const UserScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <Image source={{uri: user.photoURL}} style={styles.image} />
-        <Text style={styles.userName}>{name}</Text>
+        <Text style={styles.userName}>{user.displayName}</Text>
         <InfoNote>
           We understand that each individual is unique, so the entire approach
           to diet is relative and tailored to your unique body and goals.
@@ -44,7 +43,11 @@ const UserScreen = () => {
         <Button title="Logout" onPress={logout} />
         <View style={styles.basicInfo}>
           <Text>Basic Info</Text>
-          <TextInputField placeholder="Username" value={name} />
+          <TextInputField
+            placeholder="Username"
+            value={user.displayName}
+            editable={false}
+          />
           <TextInputField
             placeholder="Email address"
             value={user.email}
@@ -81,7 +84,6 @@ const UserScreen = () => {
         title="Save"
         onPress={() =>
           console.log({
-            name,
             height,
             currentWeight,
             desiredWeight,
