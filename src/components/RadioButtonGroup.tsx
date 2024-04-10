@@ -32,29 +32,29 @@ const btnStyles = StyleSheet.create({
   },
 });
 
-const ActivityRadioButtonGroup = ({activityLevel, setActivityLevel}) => {
-  const handleSelect = level => {
-    setActivityLevel(level);
+const RadioButtonGroup = ({selected, setSelected, data}) => {
+  const handleSelect = selected => {
+    setSelected(selected);
   };
 
-  console.log(activityLevel);
+  console.log(selected);
 
   return (
     <View style={{gap: 5}}>
-      {activityLevels.map(level => (
-        <View key={level.level} style={groupStyles.container}>
+      {data.map((item, idx) => (
+        <View key={idx} style={groupStyles.container}>
           <RadioButton
-            selected={level.level === activityLevel}
-            onPress={() => handleSelect(level.level)}
+            selected={item.value === selected}
+            onPress={() => handleSelect(item.value)}
           />
-          <Text>{level.description}</Text>
+          <Text>{item.description || ''}</Text>
         </View>
       ))}
     </View>
   );
 };
 
-export default ActivityRadioButtonGroup;
+export default RadioButtonGroup;
 
 const groupStyles = StyleSheet.create({
   container: {

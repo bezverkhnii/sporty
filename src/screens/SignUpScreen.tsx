@@ -30,7 +30,7 @@ const SignUpScreen = () => {
       '1023232230089-simi48vfd10909cialu0dqlpu1e8vn85.apps.googleusercontent.com',
   });
   //@ts-expect-error
-  const {signInWithGoogle, signInWithCredentials} = useAuthContext();
+  const {signInWithGoogle, register} = useAuthContext();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -75,7 +75,7 @@ const SignUpScreen = () => {
           <Button
             title="Sign up"
             filled
-            onPress={() => signInWithCredentials(email, password)}
+            onPress={() => register(email, password)}
           />
           <View
             style={{

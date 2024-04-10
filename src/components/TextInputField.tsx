@@ -1,15 +1,27 @@
 import React from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
+import {View, TextInput, StyleSheet, TextInputProps} from 'react-native';
 import {COLORS} from '../constants/colors';
 
-const TextInputField = ({value, placeholder, editable = true}) => {
+interface ITextInputField {
+  value: string;
+  placeholder: string;
+  editable?: boolean;
+  onChangeText?: (text: string) => void;
+}
+
+const TextInputField: React.FC<ITextInputField> = ({
+  value,
+  placeholder,
+  editable = true,
+  onChangeText,
+}) => {
   return (
     <View style={styles.inputBox}>
       <TextInput
         placeholder={placeholder}
         placeholderTextColor={COLORS.borderColor}
         value={value}
-        // onChangeText={e => setEmail(e)}
+        onChangeText={onChangeText}
         style={[!editable ? {color: COLORS.grayText} : {}, {width: '100%'}]}
         editable={editable}
       />
