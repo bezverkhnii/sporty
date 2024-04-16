@@ -5,7 +5,7 @@ import {COLORS} from '../constants/colors';
 const InfoNote = ({children}) => {
   return (
     <View style={styles.faq}>
-      <Text>{children}</Text>
+      <Text style={styles.color}>{children}</Text>
     </View>
   );
 };
@@ -16,6 +16,9 @@ export const styles = StyleSheet.create({
   faq: {
     alignItems: 'center',
     paddingVertical: 10,
-    color: COLORS.grayText,
+  },
+
+  color: {
+    color: COLORS.white,
   },
 });

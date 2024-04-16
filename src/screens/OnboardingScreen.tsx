@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {Image, StyleSheet} from 'react-native';
+import {Alert, Image, StyleSheet} from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
 import DatePickerField from '../components/DatePicker';
 import RadioButtonGroup from '../components/RadioButtonGroup';
@@ -20,15 +20,22 @@ const OnboardingScreen = () => {
   const [activitylevel, setActivitylevel] = useState<string>('level_1');
 
   const handleDone = () => {
-    firestore().collection('users').doc(auth().currentUser?.uid).update({
-      height,
-      currentWeight,
-      gender,
-      desiredWeight,
-      birthdayDate: date,
-      activitylevel,
-    });
-    navigation.navigate('User');
+    if (!date || !gender || !height || !currentWeight || !desiredWeight) {
+      Alert.alert(
+        'Fill in blank fields',
+        "Looks like you didn't provide needed data :(",
+      );
+    } else {
+      firestore().collection('users').doc(auth().currentUser?.uid).update({
+        height,
+        currentWeight,
+        gender,
+        desiredWeight,
+        birthdayDate: date,
+        activitylevel,
+      });
+      navigation.navigate('User');
+    }
   };
 
   return (

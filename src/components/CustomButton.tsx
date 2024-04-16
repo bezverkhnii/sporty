@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import {Text, TouchableOpacity} from 'react-native';
+import {ButtonProps, Text, TouchableOpacity} from 'react-native';
 import {COLORS} from '../constants/colors';
 
 interface IButton {
@@ -20,7 +20,7 @@ const CustomButton: React.FC<IButton> = ({title, filled, onPress}) => {
       onPress={onPress}>
       <Text
         style={[
-          filled ? {color: 'white'} : {color: '#123d03'},
+          filled ? {color: 'white'} : {color: COLORS.green},
           {fontWeight: '600', fontSize: 16},
         ]}>
         {title}

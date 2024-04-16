@@ -22,7 +22,10 @@ const TextInputField: React.FC<ITextInputField> = ({
         placeholderTextColor={COLORS.borderColor}
         value={value}
         onChangeText={onChangeText}
-        style={[!editable ? {color: COLORS.grayText} : {}, {width: '100%'}]}
+        style={[
+          !editable ? {color: COLORS.grayText} : {color: COLORS.white},
+          {width: '100%'},
+        ]}
         editable={editable}
       />
     </View>

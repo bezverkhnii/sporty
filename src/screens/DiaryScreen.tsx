@@ -5,6 +5,7 @@ import InfoBlock from '../components/InfoBlock';
 import {COLORS} from '../constants/colors';
 import UserBar from '../components/UserBar';
 import InfoNote from '../components/InfoNote';
+import ProductsBlock from '../components/ProductsBlock';
 
 const DiaryScreen = () => {
   return (
@@ -29,6 +30,7 @@ const DiaryScreen = () => {
           Record all your meals in a calorie diary every day. This will help me
           be aware of my nutrition and make me responsible for my choices.
         </InfoNote>
+        <ProductsBlock />
       </ScrollView>
     </SafeAreaView>
   );

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAuthContext} from '../navigation/AuthProvider';
-import Button from '../components/Button';
+import Button from '../components/CustomButton';
 import {COLORS} from '../constants/colors';
 
 const LoginScreen = () => {

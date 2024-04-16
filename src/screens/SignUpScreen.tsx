@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Button from '../components/Button.tsx';
+import Button from '../components/CustomButton.tsx';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {useState} from 'react';
 import {useAuthContext} from '../navigation/AuthProvider.tsx';

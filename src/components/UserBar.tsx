@@ -32,6 +32,7 @@ export const styles = StyleSheet.create({
   appTitle: {
     fontWeight: 'bold',
     fontSize: 30,
+    color: COLORS.white,
   },
   image: {
     width: 40,

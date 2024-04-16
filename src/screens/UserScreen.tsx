@@ -17,7 +17,7 @@ import ParametersInput from '../components/ParametersInput';
 import DatePickerField from '../components/DatePicker';
 import {COLORS} from '../constants/colors';
 import RadioButtonGroup from '../components/RadioButtonGroup';
-import CustomButton from '../components/Button';
+import CustomButton from '../components/CustomButton';
 import moment from 'moment';
 import {formatSecondsToDate} from '../utils/formatDate';
 import InfoBlock from '../components/InfoBlock';
@@ -25,9 +25,10 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {getCaloriesInfo} from '../api/getCaloriesInfo';
 import {activityLevels} from '../constants/activityLevels';
+import OpacityPressable from '../components/OpacityPressable';
 
 const UserScreen = () => {
-  const minDate = moment().subtract(18, 'years').toDate();
+  const minDate = moment().subtract(13, 'years').toDate();
   const insets = useSafeAreaInsets();
   //@ts-expect-error
   const {logout, user} = useAuthContext();
@@ -140,13 +141,15 @@ const UserScreen = () => {
             <View style={styles.infoBlockContainer}>
               <InfoBlock
                 title="Daily basal calories intake"
-                measurement={caloriesData ? caloriesData.BMR : '?'}
+                measurement={caloriesData ? Math.floor(caloriesData.BMR) : '?'}
                 filled
               />
               <InfoBlock
                 title="Maintain weight calories intake"
                 measurement={
-                  caloriesData ? caloriesData.goals['maintain weight'] : '?'
+                  caloriesData
+                    ? Math.floor(caloriesData.goals['maintain weight'])
+                    : '?'
                 }
                 filled
               />
@@ -156,9 +159,12 @@ const UserScreen = () => {
               approach to diet is relative and tailored to your unique body and
               goals.
             </InfoNote>
-            <Button title="Logout" onPress={logout} />
+            {/* <Button title="Logout" onPress={logout} /> */}
+            <OpacityPressable onPress={logout}>
+              <Text style={styles.logoutBtn}>Logout</Text>
+            </OpacityPressable>
             <View style={styles.basicInfo}>
-              <Text>Basic Info</Text>
+              <Text style={styles.textColor}>Basic Info</Text>
               <TextInputField
                 placeholder="Username"
                 value={
@@ -219,6 +225,16 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
   },
 
+  textColor: {
+    color: COLORS.white,
+  },
+
+  logoutBtn: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: COLORS.green,
+  },
+
   infoBlockContainer: {
     flexDirection: 'row',
     paddingVertical: 20,
@@ -239,6 +255,7 @@ export const styles = StyleSheet.create({
     paddingTop: 10,
     fontSize: 18,
     fontWeight: '400',
+    color: COLORS.white,
   },
 
   basicInfo: {

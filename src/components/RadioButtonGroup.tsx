@@ -47,7 +47,7 @@ const RadioButtonGroup = ({selected, setSelected, data}) => {
             selected={item.value === selected}
             onPress={() => handleSelect(item.value)}
           />
-          <Text>{item.description || ''}</Text>
+          <Text style={groupStyles.textColor}>{item.description || ''}</Text>
         </View>
       ))}
     </View>
@@ -61,5 +61,9 @@ const groupStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
+  },
+
+  textColor: {
+    color: COLORS.white,
   },
 });

@@ -1,6 +1,8 @@
 export const COLORS = {
-  primary: '#fff',
-  grayText: '#575757',
+  primary: '#424242',
+  grayText: '#8c8c8c',
   borderColor: '#cccccc',
-  green: '#325a3e',
+  green: '#39bf08',
+  white: '#fff',
+  transparent: '#ffffff23',
 };
