@@ -2,7 +2,7 @@ import React from 'react';
 import {View, TextInput, StyleSheet, TextInputProps} from 'react-native';
 import {COLORS} from '../constants/colors';
 
-interface ITextInputField {
+interface ITextInputField extends TextInputProps {
   value: string;
   placeholder: string;
   editable?: boolean;

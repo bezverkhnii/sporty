@@ -4,17 +4,24 @@ import {COLORS} from '../constants/colors';
 
 interface IButton {
   title: string;
-  filled: boolean;
+  filled?: boolean;
   onPress: () => void;
+  disabled?: boolean;
 }
 
-const CustomButton: React.FC<IButton> = ({title, filled, onPress}) => {
+const CustomButton: React.FC<IButton> = ({
+  title,
+  filled,
+  onPress,
+  disabled,
+}) => {
   return (
     <TouchableOpacity
       style={[
         filled
           ? {backgroundColor: COLORS.green}
           : {borderColor: COLORS.green, borderWidth: 3},
+        disabled ? {backgroundColor: COLORS.transparent} : {},
         {paddingVertical: 15, alignItems: 'center', borderRadius: 8},
       ]}
       onPress={onPress}>

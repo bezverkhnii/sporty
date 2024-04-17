@@ -1,7 +1,12 @@
 import React, {useState} from 'react';
-import {Pressable} from 'react-native';
+import {Pressable, PressableProps} from 'react-native';
 
-const OpacityPressable = ({children, onPress}) => {
+interface IOpacityPressable extends PressableProps {
+  children: React.ReactNode;
+  onPress: () => void;
+}
+
+const OpacityPressable: React.FC<IOpacityPressable> = ({children, onPress}) => {
   const [opacity, setOpacity] = useState(1);
   const handlePressIn = () => {
     setOpacity(0.5); // Change opacity to 0.5 when pressed in

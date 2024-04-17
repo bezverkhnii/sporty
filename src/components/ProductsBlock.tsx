@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../constants/colors';
 import OpacityPressable from './OpacityPressable';
+import AddProductModal from './AddProductModal';
 
 const ProductsBlock = () => {
+  const [isOpened, setIsOpened] = useState<boolean>(false);
   //products prop
   //   const products = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const products = [];
@@ -12,7 +14,7 @@ const ProductsBlock = () => {
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={styles.text}>Products</Text>
-        <OpacityPressable onPress={() => Alert.alert('Add prod btn')}>
+        <OpacityPressable onPress={() => setIsOpened(true)}>
           <Text style={styles.addBtn}>Add product</Text>
         </OpacityPressable>
       </View>
@@ -23,6 +25,7 @@ const ProductsBlock = () => {
           <Text style={styles.text}>Not found products</Text>
         )}
       </View>
+      <AddProductModal isOpened={isOpened} setIsOpened={setIsOpened} />
     </View>
   );
 };
