@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Modal,
@@ -14,8 +14,17 @@ import OpacityPressable from './OpacityPressable';
 import CustomButton from './CustomButton';
 import {Formik} from 'formik';
 import TextInputField from './TextInputField';
+import firestore from '@react-native-firebase/firestore';
+import {useAuthContext} from '../navigation/AuthProvider';
+import {checkIfDocExists} from '../utils/checkIfDocExists';
+import {addFoodItem} from '../utils/addFoodItem';
+import moment from 'moment';
 
 const AddProductModal = ({isOpened, setIsOpened}) => {
+  const {user} = useAuthContext();
+
+  const dayId = `${moment().date()}.${moment().month()}`;
+  const [day, month] = dayId.split('.');
   return (
     <View style={styles.centeredView}>
       <Modal animationType="slide" transparent={true} visible={isOpened}>
@@ -30,7 +39,17 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
                 proteins: '',
                 carbs: '',
               }}
-              onSubmit={values => console.log(values)}>
+              onSubmit={async ({title, calories, fat, proteins, carbs}) => {
+                const newItem = {
+                  title,
+                  calories,
+                  fat,
+                  proteins,
+                  carbs,
+                };
+                await addFoodItem(user.uid, dayId, newItem);
+                setIsOpened(false);
+              }}>
               {({handleChange, handleBlur, handleSubmit, values}) => (
                 <View
                   style={{
@@ -56,11 +75,12 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
                   />
                   <View
                     style={{
+                      width: '100%',
                       flexDirection: 'row',
-                      gap: 5,
+                      justifyContent: 'space-between',
                     }}>
                     <TextInput
-                      style={styles.input}
+                      style={[{minWidth: 70, maxWidth: 70}, styles.input]}
                       placeholderTextColor={COLORS.grayText}
                       placeholder="Fat"
                       onChangeText={handleChange('fat')}
@@ -68,7 +88,7 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
                       value={values.fat}
                     />
                     <TextInput
-                      style={styles.input}
+                      style={[{minWidth: 70, maxWidth: 70}, styles.input]}
                       placeholderTextColor={COLORS.grayText}
                       placeholder="Proteins"
                       onChangeText={handleChange('proteins')}
@@ -76,7 +96,7 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
                       value={values.proteins}
                     />
                     <TextInput
-                      style={styles.input}
+                      style={[{minWidth: 70, maxWidth: 70}, styles.input]}
                       placeholderTextColor={COLORS.grayText}
                       placeholder="Carbs"
                       onChangeText={handleChange('carbs')}

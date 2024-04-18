@@ -48,7 +48,6 @@ const UserScreen = () => {
 
     // Subscribe to the Firestore document
     const docRef = firestore().collection('users').doc(auth().currentUser?.uid);
-
     // Listen for snapshot changes
     subscriptionRef.current = docRef.onSnapshot(async doc => {
       if (doc.exists) {

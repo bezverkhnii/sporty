@@ -1,16 +1,49 @@
-import React, {useState} from 'react';
-import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {COLORS} from '../constants/colors';
 import OpacityPressable from './OpacityPressable';
 import AddProductModal from './AddProductModal';
+import firestore from '@react-native-firebase/firestore';
+import {useAuthContext} from '../navigation/AuthProvider';
+import moment from 'moment';
 
 const ProductsBlock = () => {
+  const [loading, setLoading] = useState(true);
   const [isOpened, setIsOpened] = useState<boolean>(false);
+  const [products, setProducts] = useState([]);
+  const {user} = useAuthContext();
   //products prop
   //   const products = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const products = [];
 
-  return (
+  //add subscription to doc
+  useEffect(() => {
+    setLoading(true);
+    const getProducts = async () => {
+      const dayId = `${moment().date()}.${moment().month()}`;
+      const productsDocRef = await firestore()
+        .collection('users')
+        .doc(user.uid)
+        .collection('products')
+        .doc(dayId)
+        .get();
+
+      const dbProds = productsDocRef.data();
+      setProducts(dbProds.food);
+      setLoading(false);
+    };
+    getProducts();
+  }, [user.uid]);
+
+  return loading ? (
+    <ActivityIndicator />
+  ) : (
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={styles.text}>Products</Text>
@@ -20,7 +53,7 @@ const ProductsBlock = () => {
       </View>
       <View style={styles.productsField}>
         {products.length ? (
-          products.map(prod => <Text>{prod}</Text>)
+          products.map(prod => <Text key={prod.title}>{prod.title}</Text>)
         ) : (
           <Text style={styles.text}>Not found products</Text>
         )}
