@@ -13,6 +13,7 @@ import AddProductModal from './AddProductModal';
 import firestore from '@react-native-firebase/firestore';
 import {useAuthContext} from '../navigation/AuthProvider';
 import moment from 'moment';
+import ProductBar from './ProductBar';
 
 const ProductsBlock = () => {
   const [loading, setLoading] = useState(true);
@@ -27,16 +28,25 @@ const ProductsBlock = () => {
     setLoading(true);
     const getProducts = async () => {
       const dayId = `${moment().date()}.${moment().month()}`;
-      const productsDocRef = await firestore()
-        .collection('users')
-        .doc(user.uid)
-        .collection('products')
-        .doc(dayId)
-        .get();
+      try {
+        const productsDocRef = await firestore()
+          .collection('users')
+          .doc(user.uid)
+          .collection('products')
+          .doc(dayId)
+          .get();
 
-      const dbProds = productsDocRef.data();
-      setProducts(dbProds.food);
-      setLoading(false);
+        const dbProds = productsDocRef.data();
+        if (!dbProds) {
+          setProducts([]);
+        } else {
+          setProducts(dbProds.food);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
     getProducts();
   }, [user.uid]);
@@ -53,7 +63,15 @@ const ProductsBlock = () => {
       </View>
       <View style={styles.productsField}>
         {products.length ? (
-          products.map(prod => <Text key={prod.title}>{prod.title}</Text>)
+          <>
+            <View style={styles.productsContainer}>
+              <Text style={styles.text}>Title</Text>
+              <Text style={styles.text}>Calories</Text>
+            </View>
+            {products.map(prod => (
+              <ProductBar key={prod.title} product={prod} />
+            ))}
+          </>
         ) : (
           <Text style={styles.text}>Not found products</Text>
         )}
@@ -78,8 +96,8 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    textAlign: 'center',
     color: COLORS.white,
+    fontWeight: 'bold',
   },
 
   addBtn: {
@@ -91,7 +109,13 @@ const styles = StyleSheet.create({
   productsField: {
     paddingVertical: 20,
     justifyContent: 'center',
-    alignItems: 'center',
-    gap: 20,
+    // alignItems: 'center',
+    gap: 5,
+  },
+
+  productsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
 });

@@ -8,15 +8,10 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {COLORS} from '../constants/colors';
-import OpacityPressable from './OpacityPressable';
 import CustomButton from './CustomButton';
 import {Formik} from 'formik';
-import TextInputField from './TextInputField';
-import firestore from '@react-native-firebase/firestore';
 import {useAuthContext} from '../navigation/AuthProvider';
-import {checkIfDocExists} from '../utils/checkIfDocExists';
 import {addFoodItem} from '../utils/addFoodItem';
 import moment from 'moment';
 
