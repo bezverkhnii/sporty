@@ -5,14 +5,14 @@ import {COLORS} from '../constants/colors';
 const ParametersInput = ({value, placeholder, onChangeText}) => {
   return (
     <View style={styles.container}>
-      <Text>{placeholder}</Text>
+      <Text style={{color: COLORS.white}}>{placeholder}</Text>
       <View style={styles.inputBox}>
         <TextInput
           placeholder={placeholder}
           placeholderTextColor={COLORS.borderColor}
           value={value}
           onChangeText={onChangeText}
-          style={{width: '100%'}}
+          style={{width: '100%', color: COLORS.white}}
           inputMode="numeric"
         />
       </View>

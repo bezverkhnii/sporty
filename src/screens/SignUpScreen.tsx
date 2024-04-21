@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Button from '../components/Button.tsx';
+import Button from '../components/CustomButton.tsx';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {useState} from 'react';
 import {useAuthContext} from '../navigation/AuthProvider.tsx';
@@ -30,7 +30,7 @@ const SignUpScreen = () => {
       '1023232230089-simi48vfd10909cialu0dqlpu1e8vn85.apps.googleusercontent.com',
   });
   //@ts-expect-error
-  const {signInWithGoogle, signInWithCredentials} = useAuthContext();
+  const {signInWithGoogle, register} = useAuthContext();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -75,7 +75,7 @@ const SignUpScreen = () => {
           <Button
             title="Sign up"
             filled
-            onPress={() => signInWithCredentials(email, password)}
+            onPress={() => register(email, password)}
           />
           <View
             style={{

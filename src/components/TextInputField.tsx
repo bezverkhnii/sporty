@@ -1,21 +1,31 @@
 import React from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
+import {View, TextInput, StyleSheet, TextInputProps} from 'react-native';
 import {COLORS} from '../constants/colors';
-import {useAuthContext} from '../navigation/AuthProvider';
 
-const TextInputField = ({value, placeholder, editable = true}) => {
-  const {user} = useAuthContext();
+interface ITextInputField extends TextInputProps {
+  value: string;
+  placeholder: string;
+  editable?: boolean;
+  onChangeText?: (text: string) => void;
+}
 
-  console.log(user);
-
+const TextInputField: React.FC<ITextInputField> = ({
+  value,
+  placeholder,
+  editable = true,
+  onChangeText,
+}) => {
   return (
     <View style={styles.inputBox}>
       <TextInput
         placeholder={placeholder}
         placeholderTextColor={COLORS.borderColor}
         value={value}
-        // onChangeText={e => setEmail(e)}
-        style={[!editable ? {color: COLORS.borderColor} : {}, {width: '100%'}]}
+        onChangeText={onChangeText}
+        style={[
+          !editable ? {color: COLORS.grayText} : {color: COLORS.white},
+          {width: '100%'},
+        ]}
         editable={editable}
       />
     </View>

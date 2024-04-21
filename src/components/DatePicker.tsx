@@ -10,9 +10,9 @@ const DatePickerField = ({date, setDate}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Birthday date</Text>
+      <Text style={{color: COLORS.white}}>Birthday date</Text>
       <View style={styles.inputBox}>
-        <Text>{formatDate(date)}</Text>
+        <Text style={{color: COLORS.white}}>{formatDate(date)}</Text>
         <Button title="i" onPress={() => setOpen(true)} />
         <DatePicker
           mode="date"

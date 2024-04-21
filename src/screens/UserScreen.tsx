@@ -1,96 +1,216 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Button,
   Image,
-  Pressable,
   StyleSheet,
   Text,
   View,
   ScrollView,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAuthContext} from '../navigation/AuthProvider';
 import InfoNote from '../components/InfoNote';
 import TextInputField from '../components/TextInputField';
 import ParametersInput from '../components/ParametersInput';
 import DatePickerField from '../components/DatePicker';
 import {COLORS} from '../constants/colors';
-import ActivityRadioButtonGroup from '../components/ActivityRadioButtonGroup';
-import CustomButton from '../components/Button';
+import RadioButtonGroup from '../components/RadioButtonGroup';
+import CustomButton from '../components/CustomButton';
 import moment from 'moment';
-import {formatDate} from '../utils/formatDate';
+import {formatSecondsToDate} from '../utils/formatDate';
+import InfoBlock from '../components/InfoBlock';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import {getCaloriesInfo} from '../api/getCaloriesInfo';
+import {activityLevels} from '../constants/activityLevels';
+import OpacityPressable from '../components/OpacityPressable';
 
 const UserScreen = () => {
-  const minDate = moment().subtract(18, 'years').toDate();
-
+  const minDate = moment().subtract(13, 'years').toDate();
+  const insets = useSafeAreaInsets();
   //@ts-expect-error
   const {logout, user} = useAuthContext();
-  const [name, setName] = useState(user.displayName);
-  const [height, setHeight] = useState(0);
-  const [currentWeight, setCurrentWeight] = useState(0);
-  const [desiredWeight, setDesiredWeight] = useState(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [firstName, setFirstName] = useState<string>();
+  const [lastName, setLastName] = useState<string>();
+  const [height, setHeight] = useState<number>();
+  const [currentWeight, setCurrentWeight] = useState<number>();
+  const [desiredWeight, setDesiredWeight] = useState<number>();
   const [date, setDate] = useState(minDate);
-  const [activityLevel, setActivityLevel] = useState('level_1');
+  const [activitylevel, setActivitylevel] = useState<string>('level_1');
+  const [caloriesData, setCaloriesData] = useState<number>();
+  const subscriptionRef = useRef(null);
+
+  useEffect(() => {
+    setLoading(true);
+
+    // Subscribe to the Firestore document
+    const docRef = firestore().collection('users').doc(auth().currentUser?.uid);
+    // Listen for snapshot changes
+    subscriptionRef.current = docRef.onSnapshot(async doc => {
+      if (doc.exists) {
+        const {
+          firstName,
+          lastName,
+          height,
+          currentWeight,
+          desiredWeight,
+          birthdayDate,
+          activitylevel,
+        } = doc.data();
+
+        const testDate = formatSecondsToDate(
+          birthdayDate ? birthdayDate.seconds : '',
+        );
+
+        const age = moment
+          .duration(moment().diff(testDate))
+          .humanize()
+          .split(' ')[0];
+
+        const caloriesData = await getCaloriesInfo({
+          age: age,
+          gender: 'male',
+          height: `${height}`,
+          weight: `${currentWeight}`,
+          activitylevel: activitylevel,
+        });
+
+        setCaloriesData(caloriesData);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setHeight(height);
+        setCurrentWeight(currentWeight);
+        setDesiredWeight(desiredWeight);
+        setDate(
+          birthdayDate ? formatSecondsToDate(birthdayDate.seconds) : minDate,
+        );
+        setActivitylevel(activitylevel);
+        setLoading(false);
+      }
+    });
+
+    // Cleanup function
+    return () => {
+      if (subscriptionRef.current) {
+        subscriptionRef.current();
+      }
+    };
+  }, []);
+
+  const handleSetFullName = (text: string) => {
+    const fullName = text.split(' ');
+    setFirstName(fullName[0]);
+    setLastName(fullName[1]);
+  };
+
+  const handlePress = () => {
+    if (height && currentWeight && desiredWeight && date && activitylevel) {
+      firestore().collection('users').doc(auth().currentUser?.uid).update({
+        firstName,
+        lastName,
+        height,
+        currentWeight,
+        desiredWeight,
+        birthdayDate: date,
+        activitylevel,
+      });
+    } else {
+      Alert.alert('Please provide all data!');
+    }
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        <Image source={{uri: user.photoURL}} style={styles.image} />
-        <Text style={styles.userName}>{name}</Text>
-        <InfoNote>
-          We understand that each individual is unique, so the entire approach
-          to diet is relative and tailored to your unique body and goals.
-        </InfoNote>
-        <Button title="Logout" onPress={logout} />
-        <View style={styles.basicInfo}>
-          <Text>Basic Info</Text>
-          <TextInputField placeholder="Username" value={name} />
-          <TextInputField
-            placeholder="Email address"
-            value={user.email}
-            editable={false}
-          />
-        </View>
-        <View style={styles.parametersContainer}>
-          <ParametersInput
-            placeholder="Height"
-            value={height}
-            onChangeText={e => setHeight(e)}
-          />
-          <ParametersInput
-            placeholder="Current weight"
-            value={currentWeight}
-            onChangeText={e => setCurrentWeight(e)}
-          />
-          <ParametersInput
-            placeholder="Desired weight"
-            value={desiredWeight}
-            onChangeText={e => setDesiredWeight(e)}
-          />
-          <DatePickerField date={date} setDate={setDate} />
-        </View>
-        <View>
-          <ActivityRadioButtonGroup
-            activityLevel={activityLevel}
-            setActivityLevel={setActivityLevel}
-          />
-        </View>
-      </ScrollView>
-      <CustomButton
-        filled
-        title="Save"
-        onPress={() =>
-          console.log({
-            name,
-            height,
-            currentWeight,
-            desiredWeight,
-            date: formatDate(date),
-            activityLevel,
-          })
-        }
-      />
-    </SafeAreaView>
+    <View style={[styles.container, {paddingTop: insets.top}]}>
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <ScrollView
+            contentContainerStyle={styles.scrollView}
+            showsVerticalScrollIndicator={false}>
+            <Image source={{uri: user.photoURL}} style={styles.image} />
+            <Text style={styles.userName}>
+              {user.displayName || firstName
+                ? `${firstName} ${lastName}`
+                : 'No name'}
+            </Text>
+            <View style={styles.infoBlockContainer}>
+              <InfoBlock
+                title="Daily basal calories intake"
+                measurement={caloriesData ? Math.floor(caloriesData.BMR) : '?'}
+                filled
+              />
+              <InfoBlock
+                title="Maintain weight calories intake"
+                measurement={
+                  caloriesData
+                    ? Math.floor(caloriesData.goals['maintain weight'])
+                    : '?'
+                }
+                filled
+              />
+            </View>
+            <InfoNote>
+              We understand that each individual is unique, so the entire
+              approach to diet is relative and tailored to your unique body and
+              goals.
+            </InfoNote>
+            {/* <Button title="Logout" onPress={logout} /> */}
+            <OpacityPressable onPress={logout}>
+              <Text style={styles.logoutBtn}>Logout</Text>
+            </OpacityPressable>
+            <View style={styles.basicInfo}>
+              <Text style={styles.textColor}>Basic Info</Text>
+              <TextInputField
+                placeholder="Username"
+                value={
+                  user.displayName !== null
+                    ? user.displayName
+                    : firstName
+                    ? `${firstName} ${lastName}`
+                    : ''
+                }
+                onChangeText={handleSetFullName}
+              />
+              <TextInputField
+                placeholder="Email address"
+                value={user.email}
+                editable={false}
+              />
+            </View>
+            <View style={styles.parametersContainer}>
+              <ParametersInput
+                placeholder="Height"
+                value={height}
+                onChangeText={(e: number) => setHeight(e)}
+              />
+              <ParametersInput
+                placeholder="Current weight"
+                value={currentWeight}
+                onChangeText={(e: number) => setCurrentWeight(e)}
+              />
+              <ParametersInput
+                placeholder="Desired weight"
+                value={desiredWeight}
+                onChangeText={(e: number) => setDesiredWeight(e)}
+              />
+              <DatePickerField date={date} setDate={setDate} />
+            </View>
+            <View>
+              <RadioButtonGroup
+                selected={activitylevel}
+                setSelected={setActivitylevel}
+                data={activityLevels}
+              />
+            </View>
+          </ScrollView>
+          <CustomButton filled title="Save" onPress={handlePress} />
+        </>
+      )}
+    </View>
   );
 };
 
@@ -103,6 +223,23 @@ export const styles = StyleSheet.create({
     paddingBottom: -20,
     backgroundColor: COLORS.primary,
   },
+
+  textColor: {
+    color: COLORS.white,
+  },
+
+  logoutBtn: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: COLORS.green,
+  },
+
+  infoBlockContainer: {
+    flexDirection: 'row',
+    paddingVertical: 20,
+    gap: 10,
+  },
+
   scrollView: {
     alignItems: 'center',
     paddingBottom: 10,
@@ -117,6 +254,7 @@ export const styles = StyleSheet.create({
     paddingTop: 10,
     fontSize: 18,
     fontWeight: '400',
+    color: COLORS.white,
   },
 
   basicInfo: {

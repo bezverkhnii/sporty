@@ -2,9 +2,10 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../constants/colors';
 
-const DiaryBlock = ({title, measurement, filled = false}) => {
+const InfoBlock = ({title, measurement, filled = false}) => {
   return (
-    <View style={[filled ? styles.filled : {}, styles.container]}>
+    <View
+      style={[filled ? styles.filled : styles.transparent, styles.container]}>
       <Text style={[filled ? {color: COLORS.primary} : {}, styles.text]}>
         {title}
       </Text>
@@ -15,7 +16,7 @@ const DiaryBlock = ({title, measurement, filled = false}) => {
   );
 };
 
-export default DiaryBlock;
+export default InfoBlock;
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,19 +24,25 @@ export const styles = StyleSheet.create({
     width: 170,
     paddingHorizontal: 10,
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.borderColor,
+
     borderRadius: 10,
   },
   filled: {
     backgroundColor: COLORS.green,
   },
+
+  transparent: {
+    backgroundColor: COLORS.transparent,
+  },
+
   text: {
     fontWeight: '500',
+    color: COLORS.white,
   },
   measurement: {
     paddingTop: 20,
     fontWeight: 'bold',
     fontSize: 17,
+    color: COLORS.white,
   },
 });
