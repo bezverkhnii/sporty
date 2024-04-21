@@ -14,103 +14,172 @@ import {Formik} from 'formik';
 import {useAuthContext} from '../navigation/AuthProvider';
 import {addFoodItem} from '../utils/addFoodItem';
 import moment from 'moment';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {SelectList} from 'react-native-dropdown-select-list';
+import firestore from '@react-native-firebase/firestore';
+import {updateNutritionBasedOnWeight} from '../utils/updateNutritionBasedOnWeight';
+import {updateCaloriesBasedOnNutrition} from '../utils/updateCaloriesBasedOnNutrition';
+import NutritionBlock from './NutritionBlock';
+import AddNewProductModal from './AddNewProductModal';
 
 const AddProductModal = ({isOpened, setIsOpened}) => {
   const {user} = useAuthContext();
+  const insets = useSafeAreaInsets();
+  const [existingProducts, setExistingProducts] = useState([]);
+  const [data, setData] = useState([]);
+  const [selected, setSelected] = useState();
+  const [selectedProduct, setSelectedProduct] = useState();
+  const [calories, setCalories] = useState<number>();
+  const [proteins, setProteins] = useState<number | string>();
+  const [fat, setFat] = useState<number | string>();
+  const [carbs, setCarbs] = useState<number | string>();
+  const [isVisible, setIsVisible] = useState(false);
 
   const dayId = `${moment().date()}.${moment().month()}`;
   const [day, month] = dayId.split('.');
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const productSnapshot = await firestore().collection('products').get();
+        const data = productSnapshot.docs.map(doc => {
+          return {id: doc.id, data: doc.data()};
+        });
+
+        const listData = data.map(item => {
+          return {key: item.id, value: item.data.title};
+        });
+        setExistingProducts(data);
+        setData(listData);
+
+        const unsubscribe = firestore()
+          .collection('products')
+          .onSnapshot(snapshot => {
+            const updatedData = snapshot.docs.map(doc => ({
+              id: doc.id,
+              data: doc.data(),
+            }));
+            const updatedListData = updatedData.map(item => ({
+              key: item.id,
+              value: item.data.title,
+            }));
+            setExistingProducts(updatedData);
+            setData(updatedListData);
+          });
+        return () => unsubscribe();
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+    getProducts();
+  }, []);
+
+  const handleSelect = () => {
+    setSelectedProduct(existingProducts.find(({id}) => id === selected));
+  };
+
+  const handleChange = grams => {
+    const updatedProteins = updateNutritionBasedOnWeight(
+      grams,
+      selectedProduct.data.proteins,
+    );
+    const updatedFat = updateNutritionBasedOnWeight(
+      grams,
+      selectedProduct.data.fat,
+    );
+    const updatedCarbs = updateNutritionBasedOnWeight(
+      grams,
+      selectedProduct.data.carbs,
+    );
+
+    const newOtherState = updateCaloriesBasedOnNutrition(
+      updatedProteins,
+      updatedFat,
+      updatedCarbs,
+    );
+
+    setProteins(updatedProteins);
+    setFat(updatedFat);
+    setCarbs(updatedCarbs);
+    setCalories(newOtherState);
+  };
+
+  const handleSubmit = async () => {
+    const newItem = {
+      title: selectedProduct.data.title,
+      calories,
+      proteins,
+      fat,
+      carbs,
+    };
+    await addFoodItem(user.uid, dayId, newItem);
+    setIsOpened(false);
+  };
+
   return (
-    <View style={styles.centeredView}>
-      <Modal animationType="slide" transparent={true} visible={isOpened}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.heading}>Add product</Text>
-            <Formik
-              initialValues={{
-                title: '',
-                calories: '',
-                fat: '',
-                proteins: '',
-                carbs: '',
-              }}
-              onSubmit={async ({title, calories, fat, proteins, carbs}) => {
-                const newItem = {
-                  title,
-                  calories,
-                  fat,
-                  proteins,
-                  carbs,
-                };
-                await addFoodItem(user.uid, dayId, newItem);
-                setIsOpened(false);
-              }}>
-              {({handleChange, handleBlur, handleSubmit, values}) => (
-                <View
-                  style={{
-                    gap: 10,
-                    maxWidth: 240,
-                    minWidth: 240,
-                  }}>
-                  <TextInput
-                    placeholderTextColor={COLORS.grayText}
-                    style={styles.input}
-                    placeholder="Product Name"
-                    onChangeText={handleChange('title')}
-                    onBlur={handleBlur('title')}
-                    value={values.title}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholderTextColor={COLORS.grayText}
-                    placeholder="Calories"
-                    onChangeText={handleChange('calories')}
-                    onBlur={handleBlur('calories')}
-                    value={values.calories}
-                  />
-                  <View
-                    style={{
-                      width: '100%',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <TextInput
-                      style={[{minWidth: 70, maxWidth: 70}, styles.input]}
-                      placeholderTextColor={COLORS.grayText}
-                      placeholder="Fat"
-                      onChangeText={handleChange('fat')}
-                      onBlur={handleBlur('fat')}
-                      value={values.fat}
-                    />
-                    <TextInput
-                      style={[{minWidth: 70, maxWidth: 70}, styles.input]}
-                      placeholderTextColor={COLORS.grayText}
-                      placeholder="Proteins"
-                      onChangeText={handleChange('proteins')}
-                      onBlur={handleBlur('proteins')}
-                      value={values.proteins}
-                    />
-                    <TextInput
-                      style={[{minWidth: 70, maxWidth: 70}, styles.input]}
-                      placeholderTextColor={COLORS.grayText}
-                      placeholder="Carbs"
-                      onChangeText={handleChange('carbs')}
-                      onBlur={handleBlur('carbs')}
-                      value={values.carbs}
-                    />
-                  </View>
-                  <CustomButton title="Save" onPress={handleSubmit} filled />
-                  <CustomButton
-                    title="Cancel"
-                    onPress={() => setIsOpened(false)}
-                  />
-                </View>
-              )}
-            </Formik>
+    <Modal animationType="slide" visible={isOpened}>
+      <View style={[{paddingTop: insets.top}, styles.centeredView]}>
+        <View style={styles.modalView}>
+          <Text style={styles.heading}>Add product</Text>
+          <View
+            style={{
+              gap: 10,
+            }}>
+            <SelectList
+              dropdownTextStyles={{color: COLORS.white}}
+              inputStyles={{color: COLORS.white}}
+              onSelect={() => handleSelect()}
+              search={true}
+              data={data}
+              setSelected={val => setSelected(val)}
+              save="key"
+            />
+            <TextInput
+              placeholderTextColor={COLORS.grayText}
+              style={styles.input}
+              placeholder="Grams | 100 by default"
+              onChangeText={val => handleChange(val)}
+            />
+            {selectedProduct && (
+              <View style={styles.nutritionBlock}>
+                <NutritionBlock
+                  nutritionValue={
+                    calories ? calories : selectedProduct.data.calories
+                  }
+                  nutritionType="Overrall calories"
+                />
+                <NutritionBlock
+                  nutritionValue={
+                    proteins ? proteins : selectedProduct.data.proteins
+                  }
+                  nutritionType="Proteins"
+                />
+                <NutritionBlock
+                  nutritionValue={fat ? fat : selectedProduct.data.fat}
+                  nutritionType="Fat"
+                />
+                <NutritionBlock
+                  nutritionValue={carbs ? carbs : selectedProduct.data.carbs}
+                  nutritionType="Carbs"
+                />
+              </View>
+            )}
+            <Text>Can't find product? Add it!</Text>
+            <CustomButton
+              title="Add new product"
+              filled
+              onPress={() => setIsVisible(true)}
+            />
+            <CustomButton title="Save" onPress={handleSubmit} filled />
+            <CustomButton title="Cancel" onPress={() => setIsOpened(false)} />
+            <AddNewProductModal
+              isVisible={isVisible}
+              setIsVisible={setIsVisible}
+            />
           </View>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 };
 
@@ -119,24 +188,11 @@ export default AddProductModal;
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 10,
   },
   modalView: {
-    paddingVertical: 20,
-    paddingHorizontal: 60,
-    alignItems: 'center',
-    backgroundColor: COLORS.primary,
     borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 30,
-    elevation: 5,
   },
 
   heading: {
@@ -152,5 +208,12 @@ const styles = StyleSheet.create({
     borderColor: COLORS.borderColor,
     borderRadius: 9,
     color: COLORS.white,
+  },
+
+  nutritionBlock: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 5,
   },
 });

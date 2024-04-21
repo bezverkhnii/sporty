@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -20,6 +20,7 @@ const ProductsBlock = () => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const [products, setProducts] = useState([]);
   const {user} = useAuthContext();
+  const productsRef = useRef(null);
   //products prop
   //   const products = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -29,18 +30,27 @@ const ProductsBlock = () => {
     const getProducts = async () => {
       const dayId = `${moment().date()}.${moment().month()}`;
       try {
-        const productsDocRef = await firestore()
+        const productsSnapshot = await firestore()
           .collection('users')
           .doc(user.uid)
           .collection('products')
           .doc(dayId)
           .get();
 
-        const dbProds = productsDocRef.data();
+        const dbProds = productsSnapshot.data();
         if (!dbProds) {
           setProducts([]);
         } else {
-          setProducts(dbProds.food);
+          const unsubscribe = firestore()
+            .collection('users')
+            .doc(user.uid)
+            .collection('products')
+            .doc(dayId)
+            .onSnapshot(snapshot => {
+              const updatedProds = snapshot.data();
+              setProducts(updatedProds.food);
+            });
+          return () => unsubscribe();
         }
       } catch (error) {
         console.log(error);
@@ -48,8 +58,11 @@ const ProductsBlock = () => {
         setLoading(false);
       }
     };
+
     getProducts();
   }, [user.uid]);
+
+  console.log(products);
 
   return loading ? (
     <ActivityIndicator />
@@ -68,8 +81,8 @@ const ProductsBlock = () => {
               <Text style={styles.text}>Title</Text>
               <Text style={styles.text}>Calories</Text>
             </View>
-            {products.map(prod => (
-              <ProductBar key={prod.title} product={prod} />
+            {products.map((prod, idx) => (
+              <ProductBar key={idx} product={prod} />
             ))}
           </>
         ) : (
@@ -98,6 +111,7 @@ const styles = StyleSheet.create({
   text: {
     color: COLORS.white,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 
   addBtn: {
