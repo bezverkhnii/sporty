@@ -1,16 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Alert,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Modal, StyleSheet, Text, TextInput, View} from 'react-native';
 import {COLORS} from '../constants/colors';
 import CustomButton from './CustomButton';
-import {Formik} from 'formik';
 import {useAuthContext} from '../navigation/AuthProvider';
 import {addFoodItem} from '../utils/addFoodItem';
 import moment from 'moment';
@@ -21,14 +12,22 @@ import {updateNutritionBasedOnWeight} from '../utils/updateNutritionBasedOnWeigh
 import {updateCaloriesBasedOnNutrition} from '../utils/updateCaloriesBasedOnNutrition';
 import NutritionBlock from './NutritionBlock';
 import AddNewProductModal from './AddNewProductModal';
+import {IProduct, ISelectListData} from '../types';
 
-const AddProductModal = ({isOpened, setIsOpened}) => {
+const AddProductModal = ({
+  isOpened,
+  setIsOpened,
+}: {
+  isOpened: boolean;
+  setIsOpened: (state: boolean) => void;
+}) => {
+  //@ts-expect-error
   const {user} = useAuthContext();
   const insets = useSafeAreaInsets();
-  const [existingProducts, setExistingProducts] = useState([]);
-  const [data, setData] = useState([]);
-  const [selected, setSelected] = useState();
-  const [selectedProduct, setSelectedProduct] = useState();
+  const [existingProducts, setExistingProducts] = useState<IProduct[]>([]);
+  const [data, setData] = useState<ISelectListData[]>([]);
+  const [selected, setSelected] = useState<string>();
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | null>();
   const [calories, setCalories] = useState<number>();
   const [proteins, setProteins] = useState<number | string>();
   const [fat, setFat] = useState<number | string>();
@@ -36,7 +35,6 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const dayId = `${moment().date()}.${moment().month()}`;
-  const [day, month] = dayId.split('.');
 
   useEffect(() => {
     const getProducts = async () => {
@@ -45,7 +43,6 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
         const data = productSnapshot.docs.map(doc => {
           return {id: doc.id, data: doc.data()};
         });
-
         const listData = data.map(item => {
           return {key: item.id, value: item.data.title};
         });
@@ -78,18 +75,18 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
     setSelectedProduct(existingProducts.find(({id}) => id === selected));
   };
 
-  const handleChange = grams => {
+  const handleChange = (grams: string) => {
     const updatedProteins = updateNutritionBasedOnWeight(
       grams,
-      selectedProduct.data.proteins,
+      selectedProduct!.data.proteins,
     );
     const updatedFat = updateNutritionBasedOnWeight(
       grams,
-      selectedProduct.data.fat,
+      selectedProduct!.data.fat,
     );
     const updatedCarbs = updateNutritionBasedOnWeight(
       grams,
-      selectedProduct.data.carbs,
+      selectedProduct!.data.carbs,
     );
 
     const newOtherState = updateCaloriesBasedOnNutrition(
@@ -106,7 +103,7 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
 
   const handleSubmit = async () => {
     const newItem = {
-      title: selectedProduct.data.title,
+      title: selectedProduct!.data.title,
       calories,
       proteins,
       fat,
@@ -114,6 +111,14 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
     };
     await addFoodItem(user.uid, dayId, newItem);
     setIsOpened(false);
+    setSelected('');
+    setSelectedProduct(null);
+  };
+
+  const handleCancel = () => {
+    setIsOpened(false);
+    setSelected('');
+    setSelectedProduct(null);
   };
 
   return (
@@ -131,7 +136,7 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
               onSelect={() => handleSelect()}
               search={true}
               data={data}
-              setSelected={val => setSelected(val)}
+              setSelected={(val: string) => setSelected(val)}
               save="key"
             />
             <TextInput
@@ -164,17 +169,20 @@ const AddProductModal = ({isOpened, setIsOpened}) => {
                 />
               </View>
             )}
-            <Text>Can't find product? Add it!</Text>
+            <CustomButton title="Save" onPress={handleSubmit} filled />
+            <CustomButton title="Cancel" onPress={handleCancel} />
+            <AddNewProductModal
+              isVisible={isVisible}
+              setIsVisible={setIsVisible}
+            />
+            <Text style={styles.addNew}>
+              Can't find product?{' '}
+              <Text style={styles.highlighted}>Add it!</Text>
+            </Text>
             <CustomButton
               title="Add new product"
               filled
               onPress={() => setIsVisible(true)}
-            />
-            <CustomButton title="Save" onPress={handleSubmit} filled />
-            <CustomButton title="Cancel" onPress={() => setIsOpened(false)} />
-            <AddNewProductModal
-              isVisible={isVisible}
-              setIsVisible={setIsVisible}
             />
           </View>
         </View>
@@ -215,5 +223,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 5,
+  },
+
+  addNew: {
+    marginTop: 20,
+    fontSize: 18,
+    textAlign: 'center',
+    color: COLORS.white,
+    fontWeight: '500',
+  },
+
+  highlighted: {
+    color: COLORS.green,
   },
 });

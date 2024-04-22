@@ -2,7 +2,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import {
   Image,
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -25,6 +24,7 @@ const SignUpScreen = () => {
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
 
+  //move to dotenv
   GoogleSignin.configure({
     webClientId:
       '1023232230089-simi48vfd10909cialu0dqlpu1e8vn85.apps.googleusercontent.com',

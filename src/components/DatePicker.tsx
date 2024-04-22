@@ -2,10 +2,15 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
 import {COLORS} from '../constants/colors';
 import DatePicker from 'react-native-date-picker';
-import moment from 'moment';
 import {formatDate} from '../utils/formatDate';
 
-const DatePickerField = ({date, setDate}) => {
+const DatePickerField = ({
+  date,
+  setDate,
+}: {
+  date: Date;
+  setDate: (date: Date) => void;
+}) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -19,8 +24,8 @@ const DatePickerField = ({date, setDate}) => {
           modal
           open={open}
           date={date}
-          onConfirm={date => {
-            setDate(date);
+          onConfirm={selectedDate => {
+            setDate(selectedDate);
             setOpen(false);
           }}
           onCancel={() => {

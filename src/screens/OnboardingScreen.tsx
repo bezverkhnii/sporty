@@ -34,6 +34,7 @@ const OnboardingScreen = () => {
         birthdayDate: date,
         activitylevel,
       });
+      //@ts-expect-error
       navigation.navigate('User');
     }
   };
@@ -101,6 +102,7 @@ const OnboardingScreen = () => {
             <RadioButtonGroup
               data={GENDERS}
               selected={gender}
+              //@ts-expect-error
               setSelected={setGender}
             />
           ),
@@ -121,7 +123,7 @@ const OnboardingScreen = () => {
             <TextInputField
               value={height}
               placeholder="Your height"
-              onChangeText={e => setHeight(e)}
+              onChangeText={(val: number) => setHeight(val)}
             />
           ),
           subTitleStyles: {},
@@ -142,7 +144,7 @@ const OnboardingScreen = () => {
             <TextInputField
               value={currentWeight}
               placeholder="Your weight"
-              onChangeText={e => setCurrentWeight(e)}
+              onChangeText={(val: number) => setCurrentWeight(val)}
             />
           ),
         },
@@ -162,7 +164,7 @@ const OnboardingScreen = () => {
             <TextInputField
               value={desiredWeight}
               placeholder="Your desired weight"
-              onChangeText={e => setDesiredWeight(e)}
+              onChangeText={(val: number) => setDesiredWeight(val)}
             />
           ),
         },

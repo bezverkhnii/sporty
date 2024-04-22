@@ -1,8 +1,16 @@
 import React from 'react';
-import {View, TextInput, StyleSheet, Text, Button} from 'react-native';
+import {View, TextInput, StyleSheet, Text} from 'react-native';
 import {COLORS} from '../constants/colors';
 
-const ParametersInput = ({value, placeholder, onChangeText}) => {
+const ParametersInput = ({
+  value,
+  placeholder,
+  onChangeText,
+}: {
+  value: number | undefined;
+  placeholder: string;
+  onChangeText: (val: number) => void;
+}) => {
   return (
     <View style={styles.container}>
       <Text style={{color: COLORS.white}}>{placeholder}</Text>

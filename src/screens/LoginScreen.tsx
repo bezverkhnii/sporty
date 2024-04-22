@@ -1,11 +1,10 @@
 import LottieView from 'lottie-react-native';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  Pressable,
   TouchableOpacity,
   TextInput,
   Image,
@@ -19,6 +18,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  //@ts-expect-error
   const {loginWithCredentials, signInWithGoogle} = useAuthContext();
 
   return (

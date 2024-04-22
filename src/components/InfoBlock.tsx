@@ -2,7 +2,15 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../constants/colors';
 
-const InfoBlock = ({title, measurement, filled = false}) => {
+const InfoBlock = ({
+  title,
+  measurement,
+  filled = false,
+}: {
+  title: string;
+  measurement: string | number;
+  filled?: boolean;
+}) => {
   return (
     <View
       style={[filled ? styles.filled : styles.transparent, styles.container]}>

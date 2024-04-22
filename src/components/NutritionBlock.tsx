@@ -2,7 +2,13 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../constants/colors';
 
-const NutritionBlock = ({nutritionValue, nutritionType}) => {
+const NutritionBlock = ({
+  nutritionValue,
+  nutritionType,
+}: {
+  nutritionValue: string;
+  nutritionType: string;
+}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{nutritionValue}</Text>

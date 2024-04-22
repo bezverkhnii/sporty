@@ -6,10 +6,24 @@ import {COLORS} from '../constants/colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore';
 
-const AddNewProductModal = ({isVisible, setIsVisible}) => {
+interface IFormValues {
+  title: string;
+  calories: string;
+  proteins: string;
+  fat: string;
+  carbs: string;
+}
+
+const AddNewProductModal = ({
+  isVisible,
+  setIsVisible,
+}: {
+  isVisible: boolean;
+  setIsVisible: (state: boolean) => void;
+}) => {
   const insets = useSafeAreaInsets();
 
-  const handleAddProduct = async values => {
+  const handleAddProduct = async (values: IFormValues) => {
     try {
       const {title, calories, proteins, fat, carbs} = values;
       await firestore().collection('products').add({
@@ -57,12 +71,7 @@ const AddNewProductModal = ({isVisible, setIsVisible}) => {
                 onBlur={handleBlur('calories')}
                 value={values.calories}
               />
-              <View
-                style={{
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
+              <View style={styles.nutritionInputs}>
                 <TextInput
                   style={[{minWidth: 100, maxWidth: 100}, styles.input]}
                   placeholderTextColor={COLORS.grayText}
@@ -122,6 +131,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     paddingBottom: 10,
     color: COLORS.white,
+  },
+
+  nutritionInputs: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
   form: {

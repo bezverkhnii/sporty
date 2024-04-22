@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import {ButtonProps, Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import {COLORS} from '../constants/colors';
 
 interface IButton {

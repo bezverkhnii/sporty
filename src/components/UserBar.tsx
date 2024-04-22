@@ -1,11 +1,12 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {useAuthContext} from '../navigation/AuthProvider';
 import {COLORS} from '../constants/colors';
 import {useNavigation} from '@react-navigation/native';
 import OpacityPressable from './OpacityPressable';
 
 const UserBar = () => {
+  //@ts-expect-error
   const {user} = useAuthContext();
   const navigation = useNavigation();
   return (

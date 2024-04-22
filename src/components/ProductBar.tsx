@@ -2,7 +2,17 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../constants/colors';
 
-const ProductBar = ({product}) => {
+interface IProd {
+  product: {
+    title: string;
+    calories: string;
+    proteins: string;
+    fat: string;
+    carbs: string;
+  };
+}
+
+const ProductBar = ({product}: IProd) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{product.title}</Text>

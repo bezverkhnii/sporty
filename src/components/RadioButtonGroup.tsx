@@ -1,10 +1,20 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import OpacityPressable from './OpacityPressable';
-import {activityLevels} from '../constants/activityLevels';
 import {COLORS} from '../constants/colors';
 
-const RadioButton = ({selected = false, onPress}) => {
+interface IRadioButtonsData {
+  value: string;
+  description: string;
+}
+
+const RadioButton = ({
+  selected = false,
+  onPress,
+}: {
+  selected: boolean;
+  onPress: () => void;
+}) => {
   return (
     <OpacityPressable onPress={onPress}>
       <View style={btnStyles.outerCircle}>
@@ -32,16 +42,24 @@ const btnStyles = StyleSheet.create({
   },
 });
 
-const RadioButtonGroup = ({selected, setSelected, data}) => {
-  const handleSelect = selected => {
-    setSelected(selected);
+const RadioButtonGroup = ({
+  selected,
+  setSelected,
+  data,
+}: {
+  selected: string | null;
+  setSelected: (val: string) => void;
+  data: {value: string; description: string}[];
+}) => {
+  const handleSelect = (selectedVal: string) => {
+    setSelected(selectedVal);
   };
 
   console.log(selected);
 
   return (
     <View style={{gap: 5}}>
-      {data.map((item, idx) => (
+      {data.map((item: IRadioButtonsData, idx: number) => (
         <View key={idx} style={groupStyles.container}>
           <RadioButton
             selected={item.value === selected}

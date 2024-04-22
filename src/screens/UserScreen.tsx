@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  Button,
   Image,
   StyleSheet,
   Text,
@@ -26,6 +25,24 @@ import auth from '@react-native-firebase/auth';
 import {getCaloriesInfo} from '../api/getCaloriesInfo';
 import {activityLevels} from '../constants/activityLevels';
 import OpacityPressable from '../components/OpacityPressable';
+import {ICaloriesData} from '../types';
+interface IBirthdayDate {
+  nanoseconds: number;
+  seconds: number;
+}
+
+interface IDocument {
+  exists: boolean;
+  data: () => {
+    firstName: string;
+    lastName: string;
+    height: number;
+    currentWeight: number;
+    desiredWeight: number;
+    birthdayDate: IBirthdayDate;
+    activitylevel: string;
+  };
+}
 
 const UserScreen = () => {
   const minDate = moment().subtract(13, 'years').toDate();
@@ -40,7 +57,7 @@ const UserScreen = () => {
   const [desiredWeight, setDesiredWeight] = useState<number>();
   const [date, setDate] = useState(minDate);
   const [activitylevel, setActivitylevel] = useState<string>('level_1');
-  const [caloriesData, setCaloriesData] = useState<number>();
+  const [caloriesData, setCaloriesData] = useState<ICaloriesData>();
   const subscriptionRef = useRef(null);
 
   useEffect(() => {
@@ -49,7 +66,8 @@ const UserScreen = () => {
     // Subscribe to the Firestore document
     const docRef = firestore().collection('users').doc(auth().currentUser?.uid);
     // Listen for snapshot changes
-    subscriptionRef.current = docRef.onSnapshot(async doc => {
+    //@ts-expect-error
+    subscriptionRef.current = docRef.onSnapshot(async (doc: IDocument) => {
       if (doc.exists) {
         const {
           firstName,
@@ -60,7 +78,7 @@ const UserScreen = () => {
           birthdayDate,
           activitylevel,
         } = doc.data();
-
+        console.log(birthdayDate);
         const testDate = formatSecondsToDate(
           birthdayDate ? birthdayDate.seconds : '',
         );
@@ -92,12 +110,14 @@ const UserScreen = () => {
       }
     });
 
-    // Cleanup function
     return () => {
       if (subscriptionRef.current) {
+        //@ts-expect-error
         subscriptionRef.current();
       }
     };
+    //disable dependency array cause it will break the app
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSetFullName = (text: string) => {

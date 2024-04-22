@@ -1,12 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../constants/colors';
 import OpacityPressable from './OpacityPressable';
 import AddProductModal from './AddProductModal';
@@ -19,12 +12,9 @@ const ProductsBlock = () => {
   const [loading, setLoading] = useState(true);
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const [products, setProducts] = useState([]);
+  //@ts-expect-error
   const {user} = useAuthContext();
-  const productsRef = useRef(null);
-  //products prop
-  //   const products = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-  //add subscription to doc
   useEffect(() => {
     setLoading(true);
     const getProducts = async () => {
@@ -48,7 +38,7 @@ const ProductsBlock = () => {
             .doc(dayId)
             .onSnapshot(snapshot => {
               const updatedProds = snapshot.data();
-              setProducts(updatedProds.food);
+              setProducts(updatedProds!.food);
             });
           return () => unsubscribe();
         }

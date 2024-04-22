@@ -3,10 +3,10 @@ import {View, TextInput, StyleSheet, TextInputProps} from 'react-native';
 import {COLORS} from '../constants/colors';
 
 interface ITextInputField extends TextInputProps {
-  value: string;
+  value: string | any;
   placeholder: string;
   editable?: boolean;
-  onChangeText?: (text: string) => void;
+  onChangeText?: (text: string | any) => void;
 }
 
 const TextInputField: React.FC<ITextInputField> = ({

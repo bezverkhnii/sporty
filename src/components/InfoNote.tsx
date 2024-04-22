@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../constants/colors';
 
-const InfoNote = ({children}) => {
+const InfoNote = ({children}: any) => {
   return (
     <View style={styles.faq}>
       <Text style={styles.color}>{children}</Text>
