@@ -55,7 +55,7 @@ const SignUpScreen = () => {
                 autoCapitalize="none"
                 onChangeText={e => setEmail(e)}
                 keyboardType="email-address"
-                style={{width: '100%'}}
+                style={{width: '100%', color: COLORS.white}}
               />
             </View>
           </View>
@@ -68,7 +68,7 @@ const SignUpScreen = () => {
                 secureTextEntry
                 onChangeText={p => setPassword(p)}
                 placeholderTextColor={COLORS.borderColor}
-                style={{width: '100%'}}
+                style={{width: '100%', color: COLORS.white}}
               />
             </View>
           </View>
@@ -95,11 +95,11 @@ const SignUpScreen = () => {
                 source={require('../assets/google.png')}
                 style={{height: 36, width: 36, marginRight: 8}}
               />
-              <Text>Google</Text>
+              <Text style={{color: COLORS.white}}>Google</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.loginContainer}>
-            <Text>Already have an account?</Text>
+            <Text style={{color: COLORS.white}}>Already have an account?</Text>
             <OpacityPressable onPress={() => navigation.navigate('Login')}>
               <Text style={styles.loginButton}>Log In</Text>
             </OpacityPressable>
@@ -131,7 +131,7 @@ export const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginVertical: 12,
-    color: '#000',
+    color: COLORS.white,
   },
 
   text: {
@@ -174,8 +174,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     height: 52,
-    borderWidth: 1,
-    borderColor: COLORS.borderColor,
+    backgroundColor: COLORS.transparent,
     marginRight: 4,
     borderRadius: 10,
   },
@@ -187,6 +186,6 @@ export const styles = StyleSheet.create({
   loginButton: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#217931',
+    color: COLORS.green,
   },
 });

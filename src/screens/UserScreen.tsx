@@ -26,6 +26,7 @@ import {getCaloriesInfo} from '../api/getCaloriesInfo';
 import {activityLevels} from '../constants/activityLevels';
 import OpacityPressable from '../components/OpacityPressable';
 import {ICaloriesData} from '../types';
+import {useCaloriesContext} from '../navigation/CaloriesProvider';
 interface IBirthdayDate {
   nanoseconds: number;
   seconds: number;
@@ -34,8 +35,7 @@ interface IBirthdayDate {
 interface IDocument {
   exists: boolean;
   data: () => {
-    firstName: string;
-    lastName: string;
+    username: string;
     height: number;
     currentWeight: number;
     desiredWeight: number;
@@ -50,14 +50,14 @@ const UserScreen = () => {
   //@ts-expect-error
   const {logout, user} = useAuthContext();
   const [loading, setLoading] = useState<boolean>(false);
-  const [firstName, setFirstName] = useState<string>();
-  const [lastName, setLastName] = useState<string>();
+  const [username, setUsername] = useState<string>();
   const [height, setHeight] = useState<number>();
   const [currentWeight, setCurrentWeight] = useState<number>();
   const [desiredWeight, setDesiredWeight] = useState<number>();
   const [date, setDate] = useState(minDate);
   const [activitylevel, setActivitylevel] = useState<string>('level_1');
-  const [caloriesData, setCaloriesData] = useState<ICaloriesData>();
+  //@ts-expect-error
+  const {caloriesData, setCaloriesData} = useCaloriesContext();
   const subscriptionRef = useRef(null);
 
   useEffect(() => {
@@ -70,8 +70,7 @@ const UserScreen = () => {
     subscriptionRef.current = docRef.onSnapshot(async (doc: IDocument) => {
       if (doc.exists) {
         const {
-          firstName,
-          lastName,
+          username,
           height,
           currentWeight,
           desiredWeight,
@@ -88,17 +87,20 @@ const UserScreen = () => {
           .humanize()
           .split(' ')[0];
 
-        const caloriesData = await getCaloriesInfo({
-          age: age,
-          gender: 'male',
-          height: `${height}`,
-          weight: `${currentWeight}`,
-          activitylevel: activitylevel,
-        });
+        try {
+          const caloriesData = await getCaloriesInfo({
+            age: age,
+            gender: 'male',
+            height: `${height}`,
+            weight: `${currentWeight}`,
+            activitylevel: activitylevel,
+          });
+          setCaloriesData(caloriesData);
+        } catch (error: any) {
+          console.log(error.message);
+        }
 
-        setCaloriesData(caloriesData);
-        setFirstName(firstName);
-        setLastName(lastName);
+        setUsername(username);
         setHeight(height);
         setCurrentWeight(currentWeight);
         setDesiredWeight(desiredWeight);
@@ -120,23 +122,23 @@ const UserScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSetFullName = (text: string) => {
-    const fullName = text.split(' ');
-    setFirstName(fullName[0]);
-    setLastName(fullName[1]);
+  const handleChangeUsername = (name: string) => {
+    setUsername(name);
   };
 
   const handlePress = () => {
     if (height && currentWeight && desiredWeight && date && activitylevel) {
-      firestore().collection('users').doc(auth().currentUser?.uid).update({
-        firstName,
-        lastName,
-        height,
-        currentWeight,
-        desiredWeight,
-        birthdayDate: date,
-        activitylevel,
-      });
+      firestore()
+        .collection('users')
+        .doc(auth().currentUser?.uid)
+        .update({
+          username: username ? username : null,
+          height,
+          currentWeight,
+          desiredWeight,
+          birthdayDate: date,
+          activitylevel,
+        });
     } else {
       Alert.alert('Please provide all data!');
     }
@@ -152,11 +154,7 @@ const UserScreen = () => {
             contentContainerStyle={styles.scrollView}
             showsVerticalScrollIndicator={false}>
             <Image source={{uri: user.photoURL}} style={styles.image} />
-            <Text style={styles.userName}>
-              {user.displayName || firstName
-                ? `${firstName} ${lastName}`
-                : 'No name'}
-            </Text>
+            <Text style={styles.userName}>{user.displayName || username}</Text>
             <View style={styles.infoBlockContainer}>
               <InfoBlock
                 title="Daily basal calories intake"
@@ -178,7 +176,6 @@ const UserScreen = () => {
               approach to diet is relative and tailored to your unique body and
               goals.
             </InfoNote>
-            {/* <Button title="Logout" onPress={logout} /> */}
             <OpacityPressable onPress={logout}>
               <Text style={styles.logoutBtn}>Logout</Text>
             </OpacityPressable>
@@ -189,11 +186,11 @@ const UserScreen = () => {
                 value={
                   user.displayName !== null
                     ? user.displayName
-                    : firstName
-                    ? `${firstName} ${lastName}`
+                    : username
+                    ? username
                     : ''
                 }
-                onChangeText={handleSetFullName}
+                onChangeText={(text: string) => handleChangeUsername(text)}
               />
               <TextInputField
                 placeholder="Email address"

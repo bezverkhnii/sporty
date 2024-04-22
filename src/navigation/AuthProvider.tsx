@@ -101,10 +101,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         })
         //we need to catch the whole sign up process if it fails too.
         .catch(error => {
-          console.log('Something went wrong with sign up: ', error);
+          Alert.alert('Something went wrong', firebaseErrorToText(error));
         });
     } catch (e) {
-      console.log(e);
+      Alert.alert('Something went wrong', firebaseErrorToText(e));
     }
   };
   const logout = async () => {

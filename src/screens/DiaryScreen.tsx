@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import InfoBlock from '../components/InfoBlock';
@@ -6,8 +6,12 @@ import {COLORS} from '../constants/colors';
 import UserBar from '../components/UserBar';
 import InfoNote from '../components/InfoNote';
 import ProductsBlock from '../components/ProductsBlock';
+import {useCaloriesContext} from '../navigation/CaloriesProvider';
 
 const DiaryScreen = () => {
+  //@ts-expect-error
+  const {caloriesData, consumedCalories} = useCaloriesContext();
+
   return (
     <SafeAreaView style={styles.container}>
       <UserBar />
@@ -15,16 +19,20 @@ const DiaryScreen = () => {
         <View style={styles.blockGrid}>
           <InfoBlock
             title={'Daily calorie intake'}
-            measurement={2200}
+            measurement={caloriesData.BMR}
             filled={true}
           />
-          <InfoBlock
+          {/* Think about realization */}
+          {/* <InfoBlock
             title={'Daily norm of sports'}
             measurement={2200}
             filled={true}
+          /> */}
+          <InfoBlock
+            title={'Calories consumed'}
+            measurement={consumedCalories}
           />
-          <InfoBlock title={'Calories consumed'} measurement={700} />
-          <InfoBlock title={'Calories burned'} measurement={200} />
+          {/* <InfoBlock title={'Calories burned'} measurement={200} /> */}
         </View>
         <InfoNote>
           Record all your meals in a calorie diary every day. This will help me

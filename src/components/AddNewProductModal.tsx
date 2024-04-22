@@ -5,6 +5,7 @@ import CustomButton from './CustomButton';
 import {COLORS} from '../constants/colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore';
+import LottieView from 'lottie-react-native';
 
 interface IFormValues {
   title: string;
@@ -44,6 +45,11 @@ const AddNewProductModal = ({
     <Modal visible={isVisible} animationType="slide">
       <View style={[{paddingTop: insets.top}, styles.centeredView]}>
         <Text style={styles.heading}>Add New Product</Text>
+        <LottieView
+          style={styles.animation}
+          source={require('../assets/animations/NewProduct.json')}
+          autoPlay
+        />
         <Formik
           initialValues={{
             title: '',
@@ -131,6 +137,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     paddingBottom: 10,
     color: COLORS.white,
+  },
+
+  animation: {
+    height: 300,
   },
 
   nutritionInputs: {

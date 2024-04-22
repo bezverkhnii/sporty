@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Modal, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ScrollView,
+} from 'react-native';
 import {COLORS} from '../constants/colors';
 import CustomButton from './CustomButton';
 import {useAuthContext} from '../navigation/AuthProvider';
@@ -13,6 +20,7 @@ import {updateCaloriesBasedOnNutrition} from '../utils/updateCaloriesBasedOnNutr
 import NutritionBlock from './NutritionBlock';
 import AddNewProductModal from './AddNewProductModal';
 import {IProduct, ISelectListData} from '../types';
+import LottieView from 'lottie-react-native';
 
 const AddProductModal = ({
   isOpened,
@@ -124,68 +132,81 @@ const AddProductModal = ({
   return (
     <Modal animationType="slide" visible={isOpened}>
       <View style={[{paddingTop: insets.top}, styles.centeredView]}>
-        <View style={styles.modalView}>
-          <Text style={styles.heading}>Add product</Text>
-          <View
-            style={{
-              gap: 10,
-            }}>
-            <SelectList
-              dropdownTextStyles={{color: COLORS.white}}
-              inputStyles={{color: COLORS.white}}
-              onSelect={() => handleSelect()}
-              search={true}
-              data={data}
-              setSelected={(val: string) => setSelected(val)}
-              save="key"
+        <ScrollView
+          style={{flex: 1}}
+          contentContainerStyle={{paddingBottom: insets.bottom}}>
+          <View style={styles.modalView}>
+            <Text style={styles.heading}>Add product</Text>
+            <LottieView
+              style={styles.animation}
+              source={require('../assets/animations/Food.json')}
+              autoPlay
             />
-            <TextInput
-              placeholderTextColor={COLORS.grayText}
-              style={styles.input}
-              placeholder="Grams | 100 by default"
-              onChangeText={val => handleChange(val)}
-            />
-            {selectedProduct && (
-              <View style={styles.nutritionBlock}>
-                <NutritionBlock
-                  nutritionValue={
-                    calories ? calories : selectedProduct.data.calories
-                  }
-                  nutritionType="Overrall calories"
-                />
-                <NutritionBlock
-                  nutritionValue={
-                    proteins ? proteins : selectedProduct.data.proteins
-                  }
-                  nutritionType="Proteins"
-                />
-                <NutritionBlock
-                  nutritionValue={fat ? fat : selectedProduct.data.fat}
-                  nutritionType="Fat"
-                />
-                <NutritionBlock
-                  nutritionValue={carbs ? carbs : selectedProduct.data.carbs}
-                  nutritionType="Carbs"
-                />
-              </View>
-            )}
-            <CustomButton title="Save" onPress={handleSubmit} filled />
-            <CustomButton title="Cancel" onPress={handleCancel} />
-            <AddNewProductModal
-              isVisible={isVisible}
-              setIsVisible={setIsVisible}
-            />
-            <Text style={styles.addNew}>
-              Can't find product?{' '}
-              <Text style={styles.highlighted}>Add it!</Text>
-            </Text>
-            <CustomButton
-              title="Add new product"
-              filled
-              onPress={() => setIsVisible(true)}
-            />
+            <View
+              style={{
+                gap: 10,
+              }}>
+              <SelectList
+                dropdownTextStyles={{color: COLORS.white}}
+                inputStyles={{color: COLORS.white}}
+                onSelect={() => handleSelect()}
+                search={true}
+                data={data}
+                setSelected={(val: string) => setSelected(val)}
+                save="key"
+              />
+              {selectedProduct && (
+                <>
+                  <TextInput
+                    placeholderTextColor={COLORS.grayText}
+                    style={styles.input}
+                    placeholder="Grams | 100 by default"
+                    onChangeText={val => handleChange(val)}
+                  />
+                  <View style={styles.nutritionBlock}>
+                    <NutritionBlock
+                      nutritionValue={
+                        calories ? calories : selectedProduct.data.calories
+                      }
+                      nutritionType="Overrall calories"
+                    />
+                    <NutritionBlock
+                      nutritionValue={
+                        proteins ? proteins : selectedProduct.data.proteins
+                      }
+                      nutritionType="Proteins"
+                    />
+                    <NutritionBlock
+                      nutritionValue={fat ? fat : selectedProduct.data.fat}
+                      nutritionType="Fat"
+                    />
+                    <NutritionBlock
+                      nutritionValue={
+                        carbs ? carbs : selectedProduct.data.carbs
+                      }
+                      nutritionType="Carbs"
+                    />
+                  </View>
+                </>
+              )}
+              <CustomButton title="Save" onPress={handleSubmit} filled />
+              <CustomButton title="Cancel" onPress={handleCancel} />
+              <AddNewProductModal
+                isVisible={isVisible}
+                setIsVisible={setIsVisible}
+              />
+              <Text style={styles.addNew}>
+                Can't find product?{' '}
+                <Text style={styles.highlighted}>Add it!</Text>
+              </Text>
+              <CustomButton
+                title="Add new product"
+                filled
+                onPress={() => setIsVisible(true)}
+              />
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
     </Modal>
   );
@@ -208,6 +229,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     paddingBottom: 10,
     color: COLORS.white,
+  },
+
+  animation: {
+    height: 250,
+    marginVertical: 20,
   },
 
   input: {

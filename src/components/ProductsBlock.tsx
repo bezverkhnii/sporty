@@ -7,6 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useAuthContext} from '../navigation/AuthProvider';
 import moment from 'moment';
 import ProductBar from './ProductBar';
+import {useCaloriesContext} from '../navigation/CaloriesProvider';
 
 const ProductsBlock = () => {
   const [loading, setLoading] = useState(true);
@@ -14,6 +15,7 @@ const ProductsBlock = () => {
   const [products, setProducts] = useState([]);
   //@ts-expect-error
   const {user} = useAuthContext();
+  const {consumedCalories, setConsumedCalories} = useCaloriesContext();
 
   useEffect(() => {
     setLoading(true);
@@ -39,6 +41,10 @@ const ProductsBlock = () => {
             .onSnapshot(snapshot => {
               const updatedProds = snapshot.data();
               setProducts(updatedProds!.food);
+              const caloriesSummary = updatedProds!.food
+                .map(product => product.calories)
+                .reduce((acc, curr) => acc + curr, 0);
+              setConsumedCalories(caloriesSummary);
             });
           return () => unsubscribe();
         }

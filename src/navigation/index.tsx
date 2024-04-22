@@ -1,11 +1,14 @@
 import React from 'react';
 import AuthProvider from './AuthProvider';
 import Routes from './Routes';
+import CaloriesProvider from './CaloriesProvider';
 
 const Providers = () => {
   return (
     <AuthProvider>
-      <Routes />
+      <CaloriesProvider>
+        <Routes />
+      </CaloriesProvider>
     </AuthProvider>
   );
 };

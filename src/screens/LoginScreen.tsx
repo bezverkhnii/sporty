@@ -87,19 +87,9 @@ const LoginScreen = () => {
                 source={require('../assets/google.png')}
                 style={{height: 36, width: 36, marginRight: 8}}
               />
-              <Text>Google</Text>
+              <Text style={{color: COLORS.white}}>Google</Text>
             </TouchableOpacity>
           </View>
-          {/* <View style={styles.loginContainer}>
-            <Text>Already have an account?</Text>
-            <Pressable
-              onPress={() => navigation.navigate('Login')}
-              onPressIn={handlePressIn}
-              onPressOut={handlePressOut}
-              style={{opacity}}>
-              <Text style={styles.loginButton}>Log In</Text>
-            </Pressable>
-          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -127,7 +117,7 @@ export const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginVertical: 12,
-    color: '#000',
+    color: COLORS.white,
   },
 
   text: {
@@ -170,8 +160,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     height: 52,
-    borderWidth: 1,
-    borderColor: '#cccccc',
+
+    backgroundColor: COLORS.transparent,
     marginRight: 4,
     borderRadius: 10,
   },
@@ -179,10 +169,5 @@ export const styles = StyleSheet.create({
     paddingTop: 20,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  loginButton: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#217931',
   },
 });
