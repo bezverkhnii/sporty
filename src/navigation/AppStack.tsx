@@ -6,6 +6,7 @@ import {useEffect, useState, useLayoutEffect} from 'react';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {COLORS} from '../constants/colors';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,39 +32,41 @@ const AppStack = () => {
   }
 
   return (
-    <Tab.Navigator
-      initialRouteName={isFirstLaunch ? 'Onboarding' : 'User'}
-      screenOptions={{
-        tabBarActiveTintColor: COLORS.green,
-        tabBarStyle: {
-          backgroundColor: COLORS.primary,
-          height: 70,
-        },
-      }}>
-      <Tab.Screen
-        name="Diary"
-        component={DiaryScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name="User"
-        component={UserScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name="Onboarding"
-        component={OnboardingScreen}
-        options={{
-          tabBarStyle: {display: 'none'},
-          headerShown: false,
-          tabBarButton: () => null,
-        }}
-      />
-    </Tab.Navigator>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <Tab.Navigator
+        initialRouteName={isFirstLaunch ? 'Onboarding' : 'User'}
+        screenOptions={{
+          tabBarActiveTintColor: COLORS.green,
+          tabBarStyle: {
+            backgroundColor: COLORS.primary,
+            height: 70,
+          },
+        }}>
+        <Tab.Screen
+          name="Diary"
+          component={DiaryScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="User"
+          component={UserScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="Onboarding"
+          component={OnboardingScreen}
+          options={{
+            tabBarStyle: {display: 'none'},
+            headerShown: false,
+            tabBarButton: () => null,
+          }}
+        />
+      </Tab.Navigator>
+    </GestureHandlerRootView>
   );
 };
 

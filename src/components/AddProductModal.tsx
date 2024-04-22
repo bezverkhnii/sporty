@@ -43,7 +43,6 @@ const AddProductModal = ({
   const [isVisible, setIsVisible] = useState(false);
 
   const dayId = `${moment().date()}.${moment().month()}`;
-
   useEffect(() => {
     const getProducts = async () => {
       try {

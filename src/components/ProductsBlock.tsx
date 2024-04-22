@@ -15,12 +15,13 @@ const ProductsBlock = () => {
   const [products, setProducts] = useState([]);
   //@ts-expect-error
   const {user} = useAuthContext();
-  const {consumedCalories, setConsumedCalories} = useCaloriesContext();
+  //@ts-expect-error
+  const {setConsumedCalories} = useCaloriesContext();
+  const dayId = `${moment().date()}.${moment().month()}`;
 
   useEffect(() => {
     setLoading(true);
     const getProducts = async () => {
-      const dayId = `${moment().date()}.${moment().month()}`;
       try {
         const productsSnapshot = await firestore()
           .collection('users')
@@ -56,9 +57,23 @@ const ProductsBlock = () => {
     };
 
     getProducts();
-  }, [user.uid]);
+  }, [user.uid, setConsumedCalories]);
 
-  console.log(products);
+  const handleDelete = async (idx: number) => {
+    const updatedProducts = products.filter((prod, index) => index !== idx);
+    try {
+      await firestore()
+        .collection('users')
+        .doc(user.uid)
+        .collection('products')
+        .doc(dayId)
+        .update({
+          food: updatedProducts,
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return loading ? (
     <ActivityIndicator />
@@ -78,7 +93,11 @@ const ProductsBlock = () => {
               <Text style={styles.text}>Calories</Text>
             </View>
             {products.map((prod, idx) => (
-              <ProductBar key={idx} product={prod} />
+              <ProductBar
+                key={idx}
+                product={prod}
+                onPress={() => handleDelete(idx)}
+              />
             ))}
           </>
         ) : (
