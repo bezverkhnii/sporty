@@ -25,7 +25,6 @@ import auth from '@react-native-firebase/auth';
 import {getCaloriesInfo} from '../api/getCaloriesInfo';
 import {activityLevels} from '../constants/activityLevels';
 import OpacityPressable from '../components/OpacityPressable';
-import {ICaloriesData} from '../types';
 import {useCaloriesContext} from '../navigation/CaloriesProvider';
 interface IBirthdayDate {
   nanoseconds: number;
@@ -119,8 +118,7 @@ const UserScreen = () => {
       }
     };
     //disable dependency array cause it will break the app
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setCaloriesData]);
 
   const handleChangeUsername = (name: string) => {
     setUsername(name);
@@ -143,6 +141,8 @@ const UserScreen = () => {
       Alert.alert('Please provide all data!');
     }
   };
+
+  console.log(caloriesData);
 
   return (
     <View style={[styles.container, {paddingTop: insets.top}]}>

@@ -16,7 +16,12 @@ const ProductsBlock = () => {
   //@ts-expect-error
   const {user} = useAuthContext();
   //@ts-expect-error
-  const {setConsumedCalories} = useCaloriesContext();
+  const {
+    setConsumedCalories,
+    setConsumedProteins,
+    setConsumedFat,
+    setConsumedCarbs,
+  } = useCaloriesContext();
   const dayId = `${moment().date()}.${moment().month()}`;
 
   useEffect(() => {
@@ -42,10 +47,20 @@ const ProductsBlock = () => {
             .onSnapshot(snapshot => {
               const updatedProds = snapshot.data();
               setProducts(updatedProds!.food);
-              const caloriesSummary = updatedProds!.food
-                .map(product => product.calories)
-                .reduce((acc, curr) => acc + curr, 0);
-              setConsumedCalories(caloriesSummary);
+              const summaries = updatedProds!.food.reduce(
+                (acc, product) => {
+                  acc.calories += product.calories;
+                  acc.proteins += product.proteins;
+                  acc.fat += product.fat;
+                  acc.carbs += product.carbs;
+                  return acc;
+                },
+                {calories: 0, proteins: 0, fat: 0, carbs: 0},
+              );
+              setConsumedCalories(summaries.calories);
+              setConsumedProteins(summaries.proteins);
+              setConsumedFat(summaries.fat);
+              setConsumedCarbs(summaries.carbs);
             });
           return () => unsubscribe();
         }
@@ -57,7 +72,14 @@ const ProductsBlock = () => {
     };
 
     getProducts();
-  }, [user.uid, setConsumedCalories]);
+  }, [
+    user.uid,
+    setConsumedCalories,
+    dayId,
+    setConsumedCarbs,
+    setConsumedFat,
+    setConsumedProteins,
+  ]);
 
   const handleDelete = async (idx: number) => {
     const updatedProducts = products.filter((prod, index) => index !== idx);

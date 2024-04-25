@@ -12,6 +12,14 @@ export interface IProduct {
   // };
 }
 
+export interface IProductData {
+  title: string;
+  calories: string;
+  proteins: string;
+  fat: string;
+  carbs: string;
+}
+
 export interface ISelectListData {
   key: string;
   value: string;

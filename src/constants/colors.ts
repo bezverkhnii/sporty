@@ -6,3 +6,7 @@ export const COLORS = {
   white: '#fff',
   transparent: '#ffffff23',
 };
+
+export const PROTEINS_COLOR = '#59e6ff';
+export const FAT_COLOR = '#ffc02b';
+export const CARBS_COLOR = '#63fa5e';

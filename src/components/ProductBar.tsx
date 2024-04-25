@@ -3,22 +3,13 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../constants/colors';
 import {Swipeable} from 'react-native-gesture-handler';
 import OpacityPressable from './OpacityPressable';
-
-interface IProd {
-  product: {
-    title: string;
-    calories: string;
-    proteins: string;
-    fat: string;
-    carbs: string;
-  };
-}
+import {IProductData} from '../types';
 
 const ProductBar = ({
   product,
   onPress,
 }: {
-  product: IProd;
+  product: IProductData;
   onPress: () => void;
 }) => {
   const leftSwipe = () => {

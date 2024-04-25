@@ -47,7 +47,7 @@ const LoginScreen = () => {
                 autoCapitalize="none"
                 onChangeText={e => setEmail(e)}
                 keyboardType="email-address"
-                style={{width: '100%'}}
+                style={{width: '100%', color: COLORS.white}}
               />
             </View>
           </View>
@@ -60,7 +60,7 @@ const LoginScreen = () => {
                 secureTextEntry
                 onChangeText={p => setPassword(p)}
                 placeholderTextColor={COLORS.borderColor}
-                style={{width: '100%'}}
+                style={{width: '100%', color: COLORS.white}}
               />
             </View>
           </View>
@@ -160,7 +160,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     height: 52,
-
     backgroundColor: COLORS.transparent,
     marginRight: 4,
     borderRadius: 10,

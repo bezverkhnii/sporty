@@ -16,7 +16,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SelectList} from 'react-native-dropdown-select-list';
 import firestore from '@react-native-firebase/firestore';
 import {updateNutritionBasedOnWeight} from '../utils/updateNutritionBasedOnWeight';
-import {updateCaloriesBasedOnNutrition} from '../utils/updateCaloriesBasedOnNutrition';
+import {updateCaloriesBasedWeight} from '../utils/updateCaloriesBasedWeight';
 import NutritionBlock from './NutritionBlock';
 import AddNewProductModal from './AddNewProductModal';
 import {IProduct, ISelectListData} from '../types';
@@ -96,16 +96,15 @@ const AddProductModal = ({
       selectedProduct!.data.carbs,
     );
 
-    const newOtherState = updateCaloriesBasedOnNutrition(
-      updatedProteins,
-      updatedFat,
-      updatedCarbs,
+    const newCalories = updateCaloriesBasedWeight(
+      selectedProduct!.data.calories,
+      grams,
     );
 
     setProteins(updatedProteins);
     setFat(updatedFat);
     setCarbs(updatedCarbs);
-    setCalories(newOtherState);
+    setCalories(newCalories);
   };
 
   const handleSubmit = async () => {
@@ -157,6 +156,7 @@ const AddProductModal = ({
               {selectedProduct && (
                 <>
                   <TextInput
+                    keyboardType="numeric"
                     placeholderTextColor={COLORS.grayText}
                     style={styles.input}
                     placeholder="Grams | 100 by default"

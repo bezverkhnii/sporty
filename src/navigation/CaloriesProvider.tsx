@@ -8,7 +8,10 @@ export const useCaloriesContext = () => useContext(CaloriesContext);
 
 const CaloriesProvider = ({children}) => {
   const [caloriesData, setCaloriesData] = useState<ICaloriesData>();
-  const [consumedCalories, setConsumedCalories] = useState<number>();
+  const [consumedCalories, setConsumedCalories] = useState<number>(0);
+  const [consumedProteins, setConsumedProteins] = useState<number>(0);
+  const [consumedFat, setConsumedFat] = useState<number>(0);
+  const [consumedCarbs, setConsumedCarbs] = useState<number>(0);
   //   const [BMR, setBMR] = useState<number>(0);
   //   const [extremeWeightGain, setExtremeWeightGain] = useState<number>(0);
   //   const [extremeWeightLoss, setExtremeWeightLoss] = useState<number>(0);
@@ -39,6 +42,12 @@ const CaloriesProvider = ({children}) => {
     setCaloriesData,
     consumedCalories,
     setConsumedCalories,
+    consumedProteins,
+    setConsumedProteins,
+    consumedFat,
+    setConsumedFat,
+    consumedCarbs,
+    setConsumedCarbs,
   };
 
   return (

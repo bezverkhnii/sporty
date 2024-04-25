@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import InfoBlock from '../components/InfoBlock';
@@ -7,6 +7,7 @@ import UserBar from '../components/UserBar';
 import InfoNote from '../components/InfoNote';
 import ProductsBlock from '../components/ProductsBlock';
 import {useCaloriesContext} from '../navigation/CaloriesProvider';
+import NutritionChart from '../components/NutritionChart';
 
 const DiaryScreen = () => {
   //@ts-expect-error
@@ -15,7 +16,7 @@ const DiaryScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <UserBar />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.blockGrid}>
           <InfoBlock
             title={'Daily calorie intake'}
@@ -39,6 +40,7 @@ const DiaryScreen = () => {
           be aware of my nutrition and make me responsible for my choices.
         </InfoNote>
         <ProductsBlock />
+        <NutritionChart />
       </ScrollView>
     </SafeAreaView>
   );
