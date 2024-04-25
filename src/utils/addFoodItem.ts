@@ -1,5 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import {deleteDocument} from './deleteDocument';
+import {Alert} from 'react-native';
 
 export const addFoodItem = async (userId, dayId, newItem) => {
   const [day, month] = dayId.split('.');
@@ -27,7 +28,6 @@ export const addFoodItem = async (userId, dayId, newItem) => {
     } else if (docDay === day && docMonth !== month) {
       deleteDocument(`users/${userId}/products`, doc.id);
     } else {
-      // Get the current food array
       const currentFood = doc.data().food || [];
 
       // Add the new item to the food array

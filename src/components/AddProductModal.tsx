@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {COLORS} from '../constants/colors';
 import CustomButton from './CustomButton';
@@ -25,9 +26,11 @@ import LottieView from 'lottie-react-native';
 const AddProductModal = ({
   isOpened,
   setIsOpened,
-}: {
+}: // setProducts,
+{
   isOpened: boolean;
   setIsOpened: (state: boolean) => void;
+  // setProducts?: (state: []) => void;
 }) => {
   //@ts-expect-error
   const {user} = useAuthContext();
@@ -108,17 +111,26 @@ const AddProductModal = ({
   };
 
   const handleSubmit = async () => {
-    const newItem = {
-      title: selectedProduct!.data.title,
-      calories,
-      proteins,
-      fat,
-      carbs,
-    };
-    await addFoodItem(user.uid, dayId, newItem);
-    setIsOpened(false);
-    setSelected('');
-    setSelectedProduct(null);
+    try {
+      const newItem = {
+        title: selectedProduct!.data.title,
+        calories,
+        proteins,
+        fat,
+        carbs,
+      };
+      await addFoodItem(user.uid, dayId, newItem);
+      setIsOpened(false);
+      setSelected('');
+      setSelectedProduct(null);
+    } catch (error) {
+      Alert.alert(
+        'Select a product',
+        'Please select a product from present ones or create a new one!',
+      );
+    }
+
+    // setProducts(prev => [...prev, newItem]);
   };
 
   const handleCancel = () => {

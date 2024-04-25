@@ -34,15 +34,15 @@ const NutritionChart = () => {
           <View
             style={[{backgroundColor: PROTEINS_COLOR}, styles.colorMarker]}
           />
-          <Text style={styles.text}>Protein: {proteinsPercentage}%</Text>
+          <Text style={styles.text}>Protein: {proteinsPercentage || 0}%</Text>
         </View>
         <View style={styles.directionRow}>
           <View style={[{backgroundColor: FAT_COLOR}, styles.colorMarker]} />
-          <Text style={styles.text}>Fat: {fatPercentage}%</Text>
+          <Text style={styles.text}>Fat: {fatPercentage || 0}%</Text>
         </View>
         <View style={styles.directionRow}>
           <View style={[{backgroundColor: CARBS_COLOR}, styles.colorMarker]} />
-          <Text style={styles.text}>Carbs: {carbsPercentage}%</Text>
+          <Text style={styles.text}>Carbs: {carbsPercentage || 0}%</Text>
         </View>
       </View>
       <PieChart
