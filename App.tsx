@@ -1,8 +1,18 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import SignUpScreen from './src/screens/SignUpScreen';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faGaugeHigh} from '@fortawesome/free-solid-svg-icons';
+import {faUser} from '@fortawesome/free-solid-svg-icons';
+import {faCalendarDays} from '@fortawesome/free-solid-svg-icons';
+import {faTriangleExclamation} from '@fortawesome/free-solid-svg-icons';
+
+library.add(
+  faTrash,
+  faGaugeHigh,
+  faUser,
+  faCalendarDays,
+  faTriangleExclamation,
+);
 import Providers from './src/navigation';
 
 function App() {

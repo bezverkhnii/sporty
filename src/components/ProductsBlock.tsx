@@ -15,8 +15,8 @@ const ProductsBlock = () => {
   const [products, setProducts] = useState([]);
   //@ts-expect-error
   const {user} = useAuthContext();
-  //@ts-expect-error
   const {
+    //@ts-expect-error
     setConsumedCalories,
     setConsumedProteins,
     setConsumedFat,

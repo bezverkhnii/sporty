@@ -7,6 +7,7 @@ import OnboardingScreen from '../screens/OnboardingScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {COLORS} from '../constants/colors';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,12 +42,21 @@ const AppStack = () => {
             backgroundColor: COLORS.primary,
             height: 70,
           },
+          tabBarShowLabel: false,
         }}>
         <Tab.Screen
           name="Diary"
           component={DiaryScreen}
           options={{
             headerShown: false,
+            tabBarBadge: 1,
+            tabBarIcon: ({focused}) => (
+              <FontAwesomeIcon
+                icon="calendar-days"
+                size={25}
+                style={{color: focused ? COLORS.green : COLORS.transparent}}
+              />
+            ),
           }}
         />
         <Tab.Screen
@@ -54,6 +64,13 @@ const AppStack = () => {
           component={UserScreen}
           options={{
             headerShown: false,
+            tabBarIcon: ({focused}) => (
+              <FontAwesomeIcon
+                icon="user"
+                size={25}
+                style={{color: focused ? COLORS.green : COLORS.transparent}}
+              />
+            ),
           }}
         />
         <Tab.Screen

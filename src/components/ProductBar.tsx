@@ -4,6 +4,7 @@ import {COLORS} from '../constants/colors';
 import {Swipeable} from 'react-native-gesture-handler';
 import OpacityPressable from './OpacityPressable';
 import {IProductData} from '../types';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 const ProductBar = ({
   product,
@@ -16,11 +17,7 @@ const ProductBar = ({
     return (
       <View style={styles.deleteBox}>
         <OpacityPressable onPress={onPress}>
-          <Image
-            source={require('../assets/trash-bin.png')}
-            width={24}
-            height={25}
-          />
+          <FontAwesomeIcon icon="trash" style={{color: '#ff5555'}} size={25} />
         </OpacityPressable>
       </View>
     );

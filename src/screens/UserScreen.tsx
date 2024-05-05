@@ -253,7 +253,7 @@ export const styles = StyleSheet.create({
 
   infoBlockContainer: {
     flexDirection: 'row',
-    paddingVertical: 20,
+    paddingTop: 20,
     gap: 10,
   },
 

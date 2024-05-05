@@ -18,7 +18,6 @@ interface AuthProviderProps {
 
 const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const [user, setUser] = useState(null);
-
   GoogleSignin.configure({
     webClientId:
       '1023232230089-simi48vfd10909cialu0dqlpu1e8vn85.apps.googleusercontent.com',
