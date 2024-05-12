@@ -6,7 +6,7 @@ const CaloriesContext = createContext(null);
 
 export const useCaloriesContext = () => useContext(CaloriesContext);
 
-const CaloriesProvider = ({children}) => {
+const CaloriesProvider = ({children}: {children: React.ReactNode}) => {
   const [caloriesData, setCaloriesData] = useState<ICaloriesData>();
   const [consumedCalories, setConsumedCalories] = useState<number>(0);
   const [consumedProteins, setConsumedProteins] = useState<number>(0);

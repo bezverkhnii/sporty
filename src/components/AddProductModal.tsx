@@ -26,11 +26,11 @@ import LottieView from 'lottie-react-native';
 const AddProductModal = ({
   isOpened,
   setIsOpened,
-}: // setProducts,
-{
+  setProducts,
+}: {
   isOpened: boolean;
   setIsOpened: (state: boolean) => void;
-  // setProducts?: (state: []) => void;
+  setProducts?: (state: any[]) => void;
 }) => {
   //@ts-expect-error
   const {user} = useAuthContext();
@@ -129,8 +129,6 @@ const AddProductModal = ({
         'Please select a product from present ones or create a new one!',
       );
     }
-
-    // setProducts(prev => [...prev, newItem]);
   };
 
   const handleCancel = () => {

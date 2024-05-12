@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import InfoBlock from '../components/InfoBlock';
@@ -8,13 +8,34 @@ import InfoNote from '../components/InfoNote';
 import ProductsBlock from '../components/ProductsBlock';
 import {useCaloriesContext} from '../navigation/CaloriesProvider';
 import NutritionChart from '../components/NutritionChart';
+import LottieView from 'lottie-react-native';
 
 const DiaryScreen = () => {
   //@ts-expect-error
   const {caloriesData, consumedCalories} = useCaloriesContext();
+  const [goalMet, setGoalMet] = useState<boolean>(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (consumedCalories >= caloriesData.BMR) {
+      setGoalMet(true);
+      console.log('goal met!');
+    } else {
+      setGoalMet(false);
+      console.log('nothing met');
+    }
+  });
   return (
     <SafeAreaView style={styles.container}>
+      {goalMet && (
+        <LottieView
+          style={styles.animation}
+          source={require('../assets/animations/Confetti.json')}
+          autoPlay
+          loop={false}
+        />
+      )}
+
       <UserBar />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.blockGrid}>
@@ -62,5 +83,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
+  },
+
+  animation: {
+    position: 'absolute',
+    height: '140%',
+    width: '140%',
   },
 });

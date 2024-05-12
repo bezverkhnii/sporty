@@ -2,7 +2,7 @@ import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import UserScreen from '../screens/UserScreen';
 import DiaryScreen from '../screens/DiaryScreen';
-import {useEffect, useState, useLayoutEffect} from 'react';
+import {useEffect, useState} from 'react';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {COLORS} from '../constants/colors';
@@ -12,25 +12,25 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 const Tab = createBottomTabNavigator();
 
 const AppStack = () => {
-  const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(null);
+  const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(true);
   // console.log(isFirstLaunch);
 
   //in case of onboarding screen will be added
-  useEffect(() => {
-    AsyncStorage.getItem('alreadyLaunched').then(value => {
-      console.log(value, 'val');
-      if (value == null) {
-        AsyncStorage.setItem('alreadyLaunched', 'true'); // No need to wait for `setItem` to finish, although you might want to handle errors
-        setIsFirstLaunch(true);
-      } else {
-        setIsFirstLaunch(false);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   AsyncStorage.getItem('alreadyLaunched').then(value => {
+  //     console.log(value, 'val');
+  //     if (value == null) {
+  //       AsyncStorage.setItem('alreadyLaunched', 'true'); // No need to wait for `setItem` to finish, although you might want to handle errors
+  //       setIsFirstLaunch(true);
+  //     } else {
+  //       setIsFirstLaunch(false);
+  //     }
+  //   });
+  // }, []);
 
-  if (isFirstLaunch === null) {
-    return null; // This is the 'tricky' part: The query to AsyncStorage is not finished, but we have to present something to the user. Null will just render nothing, so you can also put a placeholder of some sort, but effectively the interval between the first mount and AsyncStorage retrieving your data won't be noticeable to the user. But if you want to display anything then you can use a LOADER here
-  }
+  // if (isFirstLaunch === null) {
+  //   return null; // This is the 'tricky' part: The query to AsyncStorage is not finished, but we have to present something to the user. Null will just render nothing, so you can also put a placeholder of some sort, but effectively the interval between the first mount and AsyncStorage retrieving your data won't be noticeable to the user. But if you want to display anything then you can use a LOADER here
+  // }
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>

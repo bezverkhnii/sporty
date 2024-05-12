@@ -18,8 +18,11 @@ const ProductsBlock = () => {
   const {
     //@ts-expect-error
     setConsumedCalories,
+    //@ts-expect-error
     setConsumedProteins,
+    //@ts-expect-error
     setConsumedFat,
+    //@ts-expect-error
     setConsumedCarbs,
   } = useCaloriesContext();
   const dayId = `${moment().date()}.${moment().month()}`;
@@ -45,6 +48,7 @@ const ProductsBlock = () => {
             .collection('products')
             .doc(dayId)
             .onSnapshot(snapshot => {
+              console.log(snapshot);
               const updatedProds = snapshot.data();
               setProducts(updatedProds!.food);
               const summaries = updatedProds!.food.reduce(
@@ -126,7 +130,11 @@ const ProductsBlock = () => {
           <Text style={styles.text}>Not found products</Text>
         )}
       </View>
-      <AddProductModal isOpened={isOpened} setIsOpened={setIsOpened} />
+      <AddProductModal
+        isOpened={isOpened}
+        setIsOpened={setIsOpened}
+        setProducts={setProducts}
+      />
     </View>
   );
 };
