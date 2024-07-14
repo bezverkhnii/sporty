@@ -23,18 +23,23 @@ export const askQuestion = async (prompt: string) => {
     max_tokens: 256,
     web_access: false,
   });
-  const response = await axios.post(
-    'https://chatgpt-42.p.rapidapi.com/conversationgpt4-2',
-    data,
-    {
-      headers: {
-        'x-rapidapi-key': '53e9058eb6msh0d5eff2898c471ap1421b8jsnc2d08a6db159',
-        'x-rapidapi-host': 'chatgpt-42.p.rapidapi.com',
-        'Content-Type': 'application/json',
+  try {
+    const response = await axios.post(
+      'https://chatgpt-42.p.rapidapi.com/conversationgpt4-2',
+      data,
+      {
+        headers: {
+          'x-rapidapi-key':
+            '53e9058eb6msh0d5eff2898c471ap1421b8jsnc2d08a6db159',
+          'x-rapidapi-host': 'chatgpt-42.p.rapidapi.com',
+          'Content-Type': 'application/json',
+        },
       },
-    },
-  );
+    );
 
-  const answer = response.data.result;
-  return answer;
+    const answer = response.data.result;
+    return answer;
+  } catch (error) {
+    console.log(error);
+  }
 };

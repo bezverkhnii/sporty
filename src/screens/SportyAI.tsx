@@ -100,7 +100,7 @@ const SportyAI = () => {
             placeholder="Type here..."
             placeholderTextColor={COLORS.transparent}
             multiline
-            style={[{color: COLORS.white}, {maxWidth: 300, maxHeight: 40}]}
+            style={[{color: COLORS.white}, {maxWidth: 300, maxHeight: 20}]}
           />
           <TouchableOpacity
             onPress={() => getAnswer()}
@@ -130,12 +130,13 @@ const styles = StyleSheet.create({
 
   input: {
     margin: 5,
-    borderRadius: 20,
+    borderRadius: 30,
     padding: 3,
     backgroundColor: COLORS.transparent,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: 10,
+    alignItems: 'center',
   },
 
   chat: {

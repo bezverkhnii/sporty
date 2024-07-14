@@ -26,6 +26,7 @@ import {getCaloriesInfo} from '../api/getCaloriesInfo';
 import {activityLevels} from '../constants/activityLevels';
 import OpacityPressable from '../components/OpacityPressable';
 import {useCaloriesContext} from '../navigation/CaloriesProvider';
+import {getNutrition} from '../api/getNutrition';
 interface IBirthdayDate {
   nanoseconds: number;
   seconds: number;
@@ -40,6 +41,7 @@ interface IDocument {
     desiredWeight: number;
     birthdayDate: IBirthdayDate;
     activitylevel: string;
+    gender: string;
   };
 }
 
@@ -75,6 +77,7 @@ const UserScreen = () => {
           desiredWeight,
           birthdayDate,
           activitylevel,
+          gender,
         } = doc.data();
         console.log(birthdayDate);
         const testDate = formatSecondsToDate(
@@ -87,14 +90,23 @@ const UserScreen = () => {
           .split(' ')[0];
 
         try {
-          const caloriesData = await getCaloriesInfo({
-            age: age,
-            gender: 'male',
-            height: `${height}`,
-            weight: `${currentWeight}`,
-            activitylevel: activitylevel,
-          });
-          setCaloriesData(caloriesData);
+          // const caloriesData = await getCaloriesInfo({
+          //   age: age,
+          //   gender: gender,
+          //   height: `${height}`,
+          //   weight: `${currentWeight}`,
+          //   activitylevel: activitylevel,
+          // });
+          const nutritionData = await getNutrition(
+            gender,
+            age,
+            height,
+            currentWeight,
+            activitylevel,
+          );
+          console.log(nutritionData);
+
+          setCaloriesData({...nutritionData, activitylevel});
         } catch (error: any) {
           console.log(error.message);
         }
@@ -157,15 +169,15 @@ const UserScreen = () => {
             <Text style={styles.userName}>{user.displayName || username}</Text>
             <View style={styles.infoBlockContainer}>
               <InfoBlock
-                title="Daily basal calories intake"
-                measurement={caloriesData ? Math.floor(caloriesData.BMR) : '?'}
+                title="BMI"
+                measurement={caloriesData ? caloriesData['BMI_EER'].BMI : '?'}
                 filled
               />
               <InfoBlock
                 title="Maintain weight calories intake"
                 measurement={
                   caloriesData
-                    ? Math.floor(caloriesData.goals['maintain weight'])
+                    ? caloriesData['BMI_EER']['Estimated Daily Caloric Needs']
                     : '?'
                 }
                 filled

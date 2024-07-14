@@ -14,10 +14,27 @@ const DiaryScreen = () => {
   //@ts-expect-error
   const {caloriesData, consumedCalories} = useCaloriesContext();
   const [goalMet, setGoalMet] = useState<boolean>(false);
+  const [dailyCalorieIntake, setDailyCalorieIntake] = useState(0);
+
+  const tdee_mulitiplier = {
+    Inactive: 1,
+    'Low Active': 1.2,
+    Active: 1.55,
+    'Very Active': 1.725,
+  };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (consumedCalories >= caloriesData.BMR) {
+    setDailyCalorieIntake(
+      Number(
+        caloriesData['BMI_EER']['Estimated Daily Caloric Needs']
+          .split(' ')[0]
+          .split(',')
+          .join(''),
+      ) * tdee_mulitiplier[caloriesData.activitylevel],
+    );
+
+    if (consumedCalories >= dailyCalorieIntake) {
       setGoalMet(true);
       console.log('goal met!');
     } else {
@@ -41,7 +58,7 @@ const DiaryScreen = () => {
         <View style={styles.blockGrid}>
           <InfoBlock
             title={'Daily calorie intake'}
-            measurement={caloriesData.BMR}
+            measurement={Math.round(dailyCalorieIntake) + ' kcal/day'}
             filled={true}
           />
           {/* Think about realization */}

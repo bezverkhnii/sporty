@@ -1,22 +1,18 @@
 export const activityLevels = [
   {
-    value: 'level_1',
+    value: 'Inactive',
     description: 'Sedentary: little or no exercise',
   },
   {
-    value: 'level_2',
+    value: 'Low Active',
     description: 'Exercise 1-3 times/week',
   },
   {
-    value: 'level_3',
+    value: 'Active',
     description: 'Exercise 4-5 times/week',
   },
   {
-    value: 'level_4',
+    value: 'Very Active',
     description: 'Daily exercise or intense exercise 3-4 times/week',
-  },
-  {
-    value: 'level_5',
-    description: 'Intense exercise 6-7 times/week',
   },
 ];
