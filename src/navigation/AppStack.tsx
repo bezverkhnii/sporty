@@ -8,11 +8,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {COLORS} from '../constants/colors';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import SportyAI from '../screens/SportyAI';
+import {Image, View} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 const AppStack = () => {
-  const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(true);
+  const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(false);
   // console.log(isFirstLaunch);
 
   //in case of onboarding screen will be added
@@ -56,6 +58,36 @@ const AppStack = () => {
                 size={25}
                 style={{color: focused ? COLORS.green : COLORS.transparent}}
               />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="SportyAI"
+          component={SportyAI}
+          options={{
+            headerShown: false,
+            tabBarBadge: 'NEW',
+            tabBarIcon: ({focused}) => (
+              // <FontAwesomeIcon
+              //   icon="calendar-days"
+              //   size={25}
+              //   style={{color: focused ? COLORS.green : COLORS.transparent}}
+              // />
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: focused ? COLORS.green : COLORS.transparent,
+                  borderRadius: 100,
+                  overflow: 'hidden',
+                }}>
+                <Image
+                  source={{
+                    uri: 'https://f4.bcbits.com/img/0009644394_23.jpg',
+                    width: 30,
+                    height: 30,
+                  }}
+                />
+              </View>
             ),
           }}
         />

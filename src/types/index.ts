@@ -55,3 +55,9 @@ export interface ICaloriesData {
     'maintain weight': number;
   };
 }
+
+export interface IMessage {
+  user: string;
+  message: string;
+  id: number;
+}

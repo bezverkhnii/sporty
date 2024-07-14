@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faPaperPlane, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {faGaugeHigh} from '@fortawesome/free-solid-svg-icons';
 import {faUser} from '@fortawesome/free-solid-svg-icons';
 import {faCalendarDays} from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +12,7 @@ library.add(
   faUser,
   faCalendarDays,
   faTriangleExclamation,
+  faPaperPlane,
 );
 import Providers from './src/navigation';
 
