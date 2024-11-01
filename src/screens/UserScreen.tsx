@@ -136,13 +136,21 @@ const UserScreen = () => {
     setUsername(name);
   };
 
+  const checkIfButtonDisabled = () => {
+    if (!height || !currentWeight || !date) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const handlePress = () => {
     if (height && currentWeight && desiredWeight && date && activitylevel) {
       firestore()
         .collection('users')
         .doc(auth().currentUser?.uid)
         .update({
-          username: username ? username : null,
+          username: username ? username : user.displayName,
           height,
           currentWeight,
           desiredWeight,
@@ -226,17 +234,24 @@ const UserScreen = () => {
                 value={desiredWeight}
                 onChangeText={(e: number) => setDesiredWeight(e)}
               />
-              <DatePickerField date={date} setDate={setDate} />
+              <DatePickerField showTitle date={date} setDate={setDate} />
             </View>
-            <View>
+            <View style={{gap: 20}}>
               <RadioButtonGroup
                 selected={activitylevel}
                 setSelected={setActivitylevel}
                 data={activityLevels}
               />
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <CustomButton
+                  disabled={checkIfButtonDisabled()}
+                  filled
+                  title="Save"
+                  onPress={handlePress}
+                />
+              </View>
             </View>
           </ScrollView>
-          <CustomButton filled title="Save" onPress={handlePress} />
         </>
       )}
     </View>
@@ -271,7 +286,7 @@ export const styles = StyleSheet.create({
 
   scrollView: {
     alignItems: 'center',
-    paddingBottom: 10,
+    paddingBottom: 100,
   },
   image: {
     height: 90,

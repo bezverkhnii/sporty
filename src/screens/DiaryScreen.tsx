@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
+import {StyleSheet, View, ScrollView, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import InfoBlock from '../components/InfoBlock';
 import {COLORS} from '../constants/colors';
@@ -9,6 +9,7 @@ import ProductsBlock from '../components/ProductsBlock';
 import {useCaloriesContext} from '../navigation/CaloriesProvider';
 import NutritionChart from '../components/NutritionChart';
 import LottieView from 'lottie-react-native';
+import PhysicalActivity from '../components/PhysicalActivity';
 
 const DiaryScreen = () => {
   //@ts-expect-error
@@ -31,6 +32,7 @@ const DiaryScreen = () => {
           .split(' ')[0]
           .split(',')
           .join(''),
+        //@ts-expect-error
       ) * tdee_mulitiplier[caloriesData.activitylevel],
     );
 
@@ -53,30 +55,24 @@ const DiaryScreen = () => {
         />
       )}
 
-      <UserBar />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.gradientRight}></View>
+      <View style={styles.gradientLeft}></View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{gap: 20}}>
+        <Text style={styles.heading}>Statistics</Text>
         <View style={styles.blockGrid}>
           <InfoBlock
             title={'Daily calorie intake'}
             measurement={Math.round(dailyCalorieIntake) + ' kcal/day'}
             filled={true}
           />
-          {/* Think about realization */}
-          {/* <InfoBlock
-            title={'Daily norm of sports'}
-            measurement={2200}
-            filled={true}
-          /> */}
           <InfoBlock
             title={'Calories consumed'}
             measurement={consumedCalories}
           />
-          {/* <InfoBlock title={'Calories burned'} measurement={200} /> */}
         </View>
-        <InfoNote>
-          Record all your meals in a calorie diary every day. This will help me
-          be aware of my nutrition and make me responsible for my choices.
-        </InfoNote>
+        <PhysicalActivity />
         <ProductsBlock />
         <NutritionChart />
       </ScrollView>
@@ -94,6 +90,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  heading: {
+    fontSize: 32,
+    fontWeight: '300',
+    color: COLORS.white,
+    alignSelf: 'center',
+  },
+
   blockGrid: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -106,5 +109,35 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     height: '140%',
     width: '140%',
+  },
+
+  gradientRight: {
+    bottom: 270,
+    right: -200,
+    position: 'absolute',
+    width: 200,
+    height: 200,
+    borderRadius: 100, // Makes it a circle (blob shape)
+    backgroundColor: COLORS.primary, // Background color for the blob
+    shadowColor: 'red', // Shadow color
+    shadowOffset: {width: 0, height: 10}, // The offset of the shadow
+    shadowOpacity: 1, // The opacity of the shadow
+    shadowRadius: 100, // How blurry the shadow is
+    elevation: 15,
+  },
+
+  gradientLeft: {
+    bottom: 100,
+    left: -200,
+    position: 'absolute',
+    width: 200,
+    height: 200,
+    borderRadius: 100, // Makes it a circle (blob shape)
+    backgroundColor: COLORS.primary, // Background color for the blob
+    shadowColor: 'green', // Shadow color
+    shadowOffset: {width: 0, height: 10}, // The offset of the shadow
+    shadowOpacity: 1, // The opacity of the shadow
+    shadowRadius: 100, // How blurry the shadow is
+    elevation: 15,
   },
 });

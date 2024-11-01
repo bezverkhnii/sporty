@@ -22,12 +22,17 @@ const CustomButton: React.FC<IButton> = ({
           ? {backgroundColor: COLORS.green}
           : {borderColor: COLORS.green, borderWidth: 3},
         disabled ? {backgroundColor: COLORS.transparent} : {},
-        {paddingVertical: 15, alignItems: 'center', borderRadius: 8},
+        {
+          paddingVertical: 15,
+          alignItems: 'center',
+          borderRadius: 8,
+          width: 200,
+        },
       ]}
       onPress={onPress}>
       <Text
         style={[
-          filled ? {color: 'white'} : {color: COLORS.green},
+          filled ? {color: COLORS.primary} : {color: COLORS.green},
           {fontWeight: '600', fontSize: 16},
         ]}>
         {title}

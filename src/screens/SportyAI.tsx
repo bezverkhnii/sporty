@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingLeft: 10,
     alignItems: 'center',
+    bottom: 65,
   },
 
   chat: {

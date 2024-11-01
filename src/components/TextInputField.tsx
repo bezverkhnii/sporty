@@ -36,13 +36,10 @@ export default TextInputField;
 
 export const styles = StyleSheet.create({
   inputBox: {
-    width: '100%',
-    height: 48,
-    borderColor: COLORS.borderColor,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingLeft: 22,
+    backgroundColor: 'rgba(51,51,51,0.5)',
+    paddingHorizontal: 15,
+    paddingVertical: 13,
+    gap: 5,
+    borderRadius: 25,
   },
 });

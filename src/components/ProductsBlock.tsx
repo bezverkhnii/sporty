@@ -106,7 +106,7 @@ const ProductsBlock = () => {
   ) : (
     <View style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.text}>Products</Text>
+        <Text style={styles.text}>Consumed Products</Text>
         <OpacityPressable onPress={() => setIsOpened(true)}>
           <Text style={styles.addBtn}>Add product</Text>
         </OpacityPressable>

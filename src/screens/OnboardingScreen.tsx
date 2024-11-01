@@ -19,21 +19,29 @@ const OnboardingScreen = () => {
   const [desiredWeight, setDesiredWeight] = useState<number>();
   const [activitylevel, setActivitylevel] = useState<string>('level_1');
 
-  const handleDone = () => {
+  const handleDone = async () => {
     if (!date || !gender || !height || !currentWeight || !desiredWeight) {
       Alert.alert(
         'Fill in blank fields',
         "Looks like you didn't provide needed data :(",
       );
     } else {
-      firestore().collection('users').doc(auth().currentUser?.uid).update({
-        height,
-        currentWeight,
-        gender,
-        desiredWeight,
-        birthdayDate: date,
-        activitylevel,
-      });
+      console.log(auth().currentUser?.uid);
+
+      const res = await firestore()
+        .collection('users')
+        .doc(auth().currentUser?.uid)
+        .set({
+          height,
+          currentWeight,
+          gender,
+          desiredWeight,
+          birthdayDate: date,
+          activitylevel,
+        });
+
+      console.log(res);
+
       //@ts-expect-error
       navigation.navigate('User');
     }
@@ -45,10 +53,10 @@ const OnboardingScreen = () => {
       onDone={handleDone}
       pages={[
         {
-          backgroundColor: '#326445',
+          backgroundColor: '#202020',
           image: (
             <Image
-              source={require('../assets/handshake.png')}
+              source={require('../assets/welcome.png')}
               style={styles.image}
             />
           ),
@@ -58,25 +66,25 @@ const OnboardingScreen = () => {
             'Welcome to "sporty", your helper to achieve your healthy goals!',
         },
         {
-          backgroundColor: '#863232',
+          backgroundColor: '#202020',
           image: (
             <Image
-              source={require('../assets/question.png')}
+              source={require('../assets/zoom-in.png')}
               style={styles.image}
             />
           ),
-          title: 'Parameters',
+          title: 'Detailed look',
           titleStyles: {
             fontWeight: 'bold',
           },
           subtitle:
-            'Now, to create personalised experience, I would like to get to know you a lil better :)',
+            "Let's take a better look on your current state!",
         },
         {
-          backgroundColor: '#ffcddf',
+          backgroundColor: '#202020',
           image: (
             <Image
-              source={require('../assets/birthday-cake.png')}
+              source={require('../assets/confetti.png')}
               style={styles.image}
             />
           ),
@@ -87,10 +95,10 @@ const OnboardingScreen = () => {
           subtitle: <DatePickerField date={date} setDate={setDate} />,
         },
         {
-          backgroundColor: '#ebcdff',
+          backgroundColor: '#202020',
           image: (
             <Image
-              source={require('../assets/gender.png')}
+              source={require('../assets/person.png')}
               style={styles.image}
             />
           ),
@@ -108,14 +116,14 @@ const OnboardingScreen = () => {
           ),
         },
         {
-          backgroundColor: '#1066bb',
+          backgroundColor: '#202020',
           image: (
             <Image
               source={require('../assets/height.png')}
               style={styles.image}
             />
           ),
-          title: 'Whats your height? :)',
+          title: 'Whats your height?',
           titleStyles: {
             fontWeight: 'bold',
           },
@@ -129,14 +137,14 @@ const OnboardingScreen = () => {
           subTitleStyles: {},
         },
         {
-          backgroundColor: '#6f889a',
+          backgroundColor: '#202020',
           image: (
             <Image
-              source={require('../assets/weight-scale.png')}
+              source={require('../assets/speedometer.png')}
               style={styles.image}
             />
           ),
-          title: 'Whats your current weight? :)',
+          title: 'Whats your current weight?',
           titleStyles: {
             fontWeight: 'bold',
           },
@@ -149,14 +157,14 @@ const OnboardingScreen = () => {
           ),
         },
         {
-          backgroundColor: '#cd763c',
+          backgroundColor: '#202020',
           image: (
             <Image
-              source={require('../assets/weight-loss.png')}
+              source={require('../assets/female-body.png')}
               style={styles.image}
             />
           ),
-          title: 'And your desired weight? :)',
+          title: 'And your desired weight?',
           titleStyles: {
             fontWeight: 'bold',
           },
@@ -169,10 +177,10 @@ const OnboardingScreen = () => {
           ),
         },
         {
-          backgroundColor: '#bae0ba',
+          backgroundColor: '#202020',
           image: (
             <Image
-              source={require('../assets/training.png')}
+              source={require('../assets/dumbell.png')}
               style={styles.image}
             />
           ),
@@ -189,7 +197,7 @@ const OnboardingScreen = () => {
           ),
         },
         {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#202020',
           image: (
             <Image
               source={require('../assets/done.png')}

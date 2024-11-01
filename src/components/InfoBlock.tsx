@@ -14,10 +14,18 @@ const InfoBlock = ({
   return (
     <View
       style={[filled ? styles.filled : styles.transparent, styles.container]}>
-      <Text style={[filled ? {color: COLORS.primary} : {}, styles.text]}>
+      <Text
+        style={[
+          filled ? {color: COLORS.primary} : {color: COLORS.white},
+          styles.text,
+        ]}>
         {title}
       </Text>
-      <Text style={[filled ? {color: COLORS.primary} : {}, styles.measurement]}>
+      <Text
+        style={[
+          filled ? {color: COLORS.primary} : {color: COLORS.white},
+          styles.measurement,
+        ]}>
         {measurement}
       </Text>
     </View>
@@ -45,12 +53,10 @@ export const styles = StyleSheet.create({
 
   text: {
     fontWeight: '500',
-    color: COLORS.white,
   },
   measurement: {
     paddingTop: 20,
     fontWeight: 'bold',
     fontSize: 17,
-    color: COLORS.white,
   },
 });

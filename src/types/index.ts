@@ -61,3 +61,31 @@ export interface IMessage {
   message: string;
   id: number;
 }
+
+export interface IActivity {
+  activity: string;
+  time: {
+    seconds: number
+  };
+}
+
+export interface IMeal {
+  title: string;
+  calories: number;
+  proteins: number;
+  fat: number;
+  carbs: number;
+}
+
+export interface IUser {
+  displayName: string | null;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string | null;
+  userImg: string;
+  currentWeight: string | number;
+  desiredWeight: string | number;
+  height: string | number;
+  gender: string;
+}

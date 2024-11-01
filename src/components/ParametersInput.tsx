@@ -37,12 +37,10 @@ export const styles = StyleSheet.create({
   },
 
   inputBox: {
-    height: 48,
-    borderColor: COLORS.borderColor,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingLeft: 22,
+    backgroundColor: 'rgba(51,51,51,0.5)',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    gap: 5,
+    borderRadius: 25,
   },
 });

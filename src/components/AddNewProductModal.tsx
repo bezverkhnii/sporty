@@ -45,11 +45,11 @@ const AddNewProductModal = ({
     <Modal visible={isVisible} animationType="slide">
       <View style={[{paddingTop: insets.top}, styles.centeredView]}>
         <Text style={styles.heading}>Add New Product</Text>
-        <LottieView
+        {/* <LottieView
           style={styles.animation}
           source={require('../assets/animations/NewProduct.json')}
           autoPlay
-        />
+        /> */}
         <Formik
           initialValues={{
             title: '',
